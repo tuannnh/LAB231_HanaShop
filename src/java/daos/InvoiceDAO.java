@@ -5,10 +5,12 @@
  */
 package daos;
 
+import java.io.Serializable;
+
 /**
  *
  * @author tuannnh
  */
-public class InvoiceDAO {
+public class InvoiceDAO implements Serializable{
     
 }

@@ -20,6 +20,38 @@
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>controllers.RegisterServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateFoodServlet</servlet-name>
+        <servlet-class>controllers.CreateFoodServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchFoodServlet</servlet-name>
+        <servlet-class>controllers.SearchFoodServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateFoodServlet</servlet-name>
+        <servlet-class>controllers.UpdateFoodServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteFoodServlet</servlet-name>
+        <servlet-class>controllers.DeleteFoodServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewFoodServlet</servlet-name>
+        <servlet-class>controllers.ViewFoodServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminSearchServlet</servlet-name>
+        <servlet-class>controllers.AdminSearchServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>controllers.UploadServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImageServlet</servlet-name>
+        <servlet-class>controllers.LoadImageServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -32,6 +64,38 @@
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateFoodServlet</servlet-name>
+        <url-pattern>/CreateFoodServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchFoodServlet</servlet-name>
+        <url-pattern>/SearchFoodServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateFoodServlet</servlet-name>
+        <url-pattern>/UpdateFoodServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteFoodServlet</servlet-name>
+        <url-pattern>/DeleteFoodServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewFoodServlet</servlet-name>
+        <url-pattern>/ViewFoodServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminSearchServlet</servlet-name>
+        <url-pattern>/AdminSearchServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/UploadServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageServlet</servlet-name>
+        <url-pattern>/images/*</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -40,4 +104,5 @@
     <!--    <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>-->
+
 </web-app>

@@ -105,14 +105,22 @@ public class FilterDispatcher implements Filter {
                     url = resource;
 
                 }
+                
+                if (resource.contains(".png") || resource.contains(".jpg")) {
+                    url = resource;
+                }
+
+                if (resource.contains("CreateFood")) {
+                    url = resource;
+                }
             }
-            
+
             if (uri.lastIndexOf("/assets") > 0) {
                 url = uri.substring(lastIndex + 1);
             }
 
             if (url != null) {
-                request.getRequestDispatcher(url).forward(request, response);
+                request.getRequestDispatcher(url).forward(httpRequest, response);
             } else {
                 chain.doFilter(request, response);
             }
@@ -120,7 +128,6 @@ public class FilterDispatcher implements Filter {
         } catch (Throwable t) {
             log.info("Error at Filter Dispatcher: " + t.getMessage());
         }
-
     }
 
     /**

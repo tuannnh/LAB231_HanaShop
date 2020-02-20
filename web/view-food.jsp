@@ -1,6 +1,6 @@
 <%-- 
-    Document   : update-product
-    Created on : Feb 19, 2020, 2:40:44 PM
+    Document   : view-food
+    Created on : Feb 20, 2020, 10:33:14 AM
     Author     : tuannnh
 --%>
 
@@ -12,6 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+          <%@include file="header.jsp" %>
+        <%@include file="footer.jsp" %>
     </body>
 </html>

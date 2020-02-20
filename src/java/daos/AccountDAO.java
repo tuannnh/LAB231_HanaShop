@@ -6,6 +6,7 @@
 package daos;
 
 import entities.Account;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -17,7 +18,7 @@ import javax.persistence.Query;
  *
  * @author tuannnh
  */
-public class AccountDAO {
+public class AccountDAO implements Serializable{
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("Lab231_HanaShopPU");
 

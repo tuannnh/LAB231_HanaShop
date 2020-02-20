@@ -7,9 +7,7 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,12 +18,10 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -41,8 +37,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
     @NamedQuery(name = "Product.findByCreateDate", query = "SELECT p FROM Product p WHERE p.createDate = :createDate"),
     @NamedQuery(name = "Product.findByQuantity", query = "SELECT p FROM Product p WHERE p.quantity = :quantity"),
-    @NamedQuery(name = "Product.findByModifiedDate", query = "SELECT p FROM Product p WHERE p.modifiedDate = :modifiedDate")})
+    @NamedQuery(name = "Product.findByModifiedDate", query = "SELECT p FROM Product p WHERE p.modifiedDate = :modifiedDate"),
+    @NamedQuery(name = "Product.findByStatus", query = "SELECT p FROM Product p WHERE p.status = :status")})
 public class Product implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,8 +71,9 @@ public class Product implements Serializable {
     @Column(name = "modifiedDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private List<OrderItem> orderItemList;
+    @Basic(optional = false)
+    @Column(name = "status", nullable = false, length = 50)
+    private String status;
     @JoinColumn(name = "modifiedBy", referencedColumnName = "email")
     @ManyToOne
     private Account modifiedBy;
@@ -89,7 +88,7 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public Product(Integer id, String name, String imageURL, String description, float price, Date createDate, int quantity) {
+    public Product(Integer id, String name, String imageURL, String description, float price, Date createDate, int quantity, String status) {
         this.id = id;
         this.name = name;
         this.imageURL = imageURL;
@@ -97,6 +96,18 @@ public class Product implements Serializable {
         this.price = price;
         this.createDate = createDate;
         this.quantity = quantity;
+        this.status = status;
+    }
+
+    public Product(String name, String imageURL, String description, float price, Date createDate, int quantity, Category categoryId, String status) {
+        this.name = name;
+        this.imageURL = imageURL;
+        this.description = description;
+        this.price = price;
+        this.createDate = createDate;
+        this.quantity = quantity;
+        this.categoryId = categoryId;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -163,13 +174,12 @@ public class Product implements Serializable {
         this.modifiedDate = modifiedDate;
     }
 
-    @XmlTransient
-    public List<OrderItem> getOrderItemList() {
-        return orderItemList;
+    public String getStatus() {
+        return status;
     }
 
-    public void setOrderItemList(List<OrderItem> orderItemList) {
-        this.orderItemList = orderItemList;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Account getModifiedBy() {
@@ -212,5 +222,5 @@ public class Product implements Serializable {
     public String toString() {
         return "entities.Product[ id=" + id + " ]";
     }
-    
+
 }

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : add-product
-    Created on : Feb 19, 2020, 2:40:31 PM
+    Document   : update-product
+    Created on : Feb 19, 2020, 2:40:44 PM
     Author     : tuannnh
 --%>
 
@@ -12,6 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+         <%@include file="header.jsp" %>
+        <%@include file="footer.jsp" %>
     </body>
 </html>

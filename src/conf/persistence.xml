@@ -5,8 +5,8 @@
     <class>entities.Invoice</class>
     <class>entities.OrderItem</class>
     <class>entities.Category</class>
-    <class>entities.Product</class>
     <class>entities.Account</class>
+    <class>entities.Product</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=ShopDB"/>

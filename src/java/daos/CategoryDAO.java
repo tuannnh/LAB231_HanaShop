@@ -5,10 +5,9 @@
  */
 package daos;
 
-import entities.Product;
+import entities.Category;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -17,14 +16,19 @@ import javax.persistence.Persistence;
  *
  * @author tuannnh
  */
-public class ProductDAO implements Serializable {
+public class CategoryDAO implements Serializable {
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("Lab231_HanaShopPU");
 
-    public void createProduct(Product newProduct) throws Exception {
+    public Category findById(int categoryId) throws Exception {
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(newProduct);
-        em.getTransaction().commit();
+        return em.find(Category.class, categoryId);
     }
+    
+    public List<Category> getAllCategories() throws Exception{
+        EntityManager em = emf.createEntityManager();
+        List<Category> categories = em.createNamedQuery("Category.findAll").getResultList();
+        return categories;
+    }
+    
 }

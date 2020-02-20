@@ -6,14 +6,17 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -28,6 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Account.findByPrivilege", query = "SELECT a FROM Account a WHERE a.privilege = :privilege"),
     @NamedQuery(name = "Account.findByPassword", query = "SELECT a FROM Account a WHERE a.password = :password")})
 public class Account implements Serializable {
+    @OneToMany(mappedBy = "modifiedBy")
+    private List<Product> productList;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -104,6 +109,15 @@ public class Account implements Serializable {
     @Override
     public String toString() {
         return email;
+    }
+
+    @XmlTransient
+    public List<Product> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
     
 }
