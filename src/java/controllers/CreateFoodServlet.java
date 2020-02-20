@@ -6,6 +6,7 @@
 package controllers;
 
 import daos.CategoryDAO;
+import daos.ProductDAO;
 import entities.Category;
 import entities.Product;
 import java.io.BufferedReader;
@@ -42,11 +43,7 @@ public class CreateFoodServlet extends HttpServlet {
             String price = getValue(request.getPart("txtPrice"));
             String quantity = getValue(request.getPart("txtQuantity"));
             String categoryId = getValue(request.getPart("txtCategory"));
-            System.out.println(quantity);
-            System.out.println(name);
-            System.out.println(description);
-            System.out.println(price);
-            System.out.println(categoryId);
+
             CategoryDAO cdao = new CategoryDAO();
             Category category = cdao.findById(Integer.parseInt(categoryId));
 
@@ -60,20 +57,16 @@ public class CreateFoodServlet extends HttpServlet {
             if (!savePath.exists()) {
                 savePath.mkdir();
             }
-            
-     
             File file = new File(savePath, fileName);
 
             try (InputStream fileContent = filePart.getInputStream()) {
                 Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            System.out.println(file.toPath());
-            System.out.println(file.getAbsolutePath());
-
-            String imageURL = file.toPath().toString();
-            System.out.println("Image URL: " + imageURL);
+            String imageURL = "/images/" + fileName;
             Product newProduct = new Product(name, imageURL, description, Float.parseFloat(price), createDate, Integer.parseInt(quantity), category, status);
+            ProductDAO pdao = new ProductDAO();
+            pdao.createProduct(newProduct);
         } catch (Exception e) {
             log.info("Error at Create Food Servlet: " + e.getMessage());
             e.printStackTrace();

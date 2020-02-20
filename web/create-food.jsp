@@ -27,8 +27,7 @@
                                         <h6>Product Image</h6>
                                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                             <div class="fileinput-new thumbnail img-no-padding" style="max-width: 370px; max-height: 250px;">
-                                                <!--<img src="assets/img/image_placeholder.jpg" alt="...">-->
-                                                <img src="images/mac.png" alt="...">
+                                                <img src="assets/img/image_placeholder.jpg" alt="...">
                                             </div>
                                             <div class="fileinput-preview fileinput-exists thumbnail img-no-padding"
                                                  style="max-width: 370px; max-height: 250px;"></div>
@@ -52,7 +51,7 @@
                                         %>
                                         <select name="txtCategory" class="selectpicker col-md-5 show-tick" data-style="btn-info">
                                             <c:forEach items="${categoryList}" var="category">
-                                                <option class="select-option" value="${category.id}">${category} + ${category.id}</option>
+                                                <option class="select-option" value="${category.id}">${category}</option>
                                             </c:forEach>
                                         </select>
 
