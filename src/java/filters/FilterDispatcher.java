@@ -103,7 +103,12 @@ public class FilterDispatcher implements Filter {
 
                 if (resource.lastIndexOf(".jsp") > 0) {
                     url = resource;
+
                 }
+            }
+            
+            if (uri.lastIndexOf("/assets") > 0) {
+                url = uri.substring(lastIndex + 1);
             }
 
             if (url != null) {

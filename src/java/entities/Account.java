@@ -6,18 +6,14 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,8 +25,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a"),
     @NamedQuery(name = "Account.findByEmail", query = "SELECT a FROM Account a WHERE a.email = :email"),
-    @NamedQuery(name = "Account.findByName", query = "SELECT a FROM Account a WHERE a.name = :name"),
-    @NamedQuery(name = "Account.findByPrivilege", query = "SELECT a FROM Account a WHERE a.privilege = :privilege")})
+    @NamedQuery(name = "Account.findByPrivilege", query = "SELECT a FROM Account a WHERE a.privilege = :privilege"),
+    @NamedQuery(name = "Account.findByPassword", query = "SELECT a FROM Account a WHERE a.password = :password")})
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,15 +34,10 @@ public class Account implements Serializable {
     @Column(name = "email", nullable = false, length = 50)
     private String email;
     @Basic(optional = false)
-    @Column(name = "name", nullable = false, length = 150)
-    private String name;
-    @Basic(optional = false)
     @Column(name = "privilege", nullable = false, length = 10)
     private String privilege;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
-    private List<Invoice> invoiceList;
-    @OneToMany(mappedBy = "modifiedBy")
-    private List<Product> productList;
+    @Column(name = "password", length = 50)
+    private String password;
 
     public Account() {
     }
@@ -55,9 +46,14 @@ public class Account implements Serializable {
         this.email = email;
     }
 
-    public Account(String email, String name, String privilege) {
+    public Account(String email, String privilege) {
         this.email = email;
-        this.name = name;
+        this.privilege = privilege;
+    }
+    
+     public Account(String email,String password, String privilege) {
+        this.email = email;
+        this.password = password;
         this.privilege = privilege;
     }
 
@@ -69,14 +65,6 @@ public class Account implements Serializable {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPrivilege() {
         return privilege;
     }
@@ -85,22 +73,12 @@ public class Account implements Serializable {
         this.privilege = privilege;
     }
 
-    @XmlTransient
-    public List<Invoice> getInvoiceList() {
-        return invoiceList;
+    public String getPassword() {
+        return password;
     }
 
-    public void setInvoiceList(List<Invoice> invoiceList) {
-        this.invoiceList = invoiceList;
-    }
-
-    @XmlTransient
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
@@ -125,7 +103,7 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Account[ email=" + email + " ]";
+        return email;
     }
     
 }
