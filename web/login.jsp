@@ -27,6 +27,7 @@
         <link href="assets/css/paper-kit.css?v=2.3.0" rel="stylesheet" />
         <link href="assets/css/demo.css" rel="stylesheet" />
         <link href="assets/css/sweetalert2.min.css" rel="stylesheet" />
+        <link href="assets/css/mycss.css" rel="stylesheet" />
     </head>
     <body class="register-page full-screen sidebar-collapse">
 
@@ -75,7 +76,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-6 ml-auto mr-auto">
                             <div class="card card-register">
                                 <h5 class="card-title text-center text-danger">${requestScope.ERROR_MESSAGE}</h5>
-                                
+
                                 <h3 class="card-title text-center">Login</h3>
                                 <div class="social">
                                     <c:set var="baseURL" value="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}"/>
@@ -132,6 +133,7 @@
         <!--  Plugin for presentation page - isometric cards  -->
         <script src="assets/js/plugins/presentation-page/main.js"></script>
         <script src="assets/js/sweetalert2.min.js"></script>
+        <script src="assets/js/myjs.js"></script>
 
     </body>
 </html>

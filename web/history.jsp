@@ -46,7 +46,7 @@
                                             <th class="text-center">Purchase Date</th>
                                             <th class="text-center">Quantity</th>
                                             <th class="text-center">Price</th>
-                                            <th class="text-center">Total</th>
+                                            <th class="text-center">Subtotal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -63,22 +63,16 @@
                                             <td class="text-center">€ 99,225</td>
                                             <td class="text-center">1000$</td>
                                         </tr>
+                          
                                         <tr>
-                                            <td class="text-center">2</td>
-                                            <td>John Doe</td>
-                                            <td>Design</td>
-                                            <td>2012</td>
-                                            <td class="text-right">€ 89,241</td>
-                                            <td class="td-actions text-right">
-
-                                                <button type="button" data-toggle="tooltip" data-placement="top" title=""
-                                                        data-original-title="Edit Product" class="btn btn-success btn-link btn-sm">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <button type="button" data-toggle="tooltip" data-placement="top" title=""
-                                                        data-original-title="Delete" class="btn btn-danger btn-link btn-sm">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
+                                            <td colspan="2"></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="td-total text-center">
+                                                Total
+                                            </td>
+                                            <td class="td-total text-center">
+                                                <small>€</small>12,999
                                             </td>
                                         </tr>
                                     </tbody>

@@ -7,7 +7,9 @@ package entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,10 +20,13 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -32,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
+    @NamedQuery(name = "Product.findAllAvailable", query = "SELECT p FROM Product p WHERE p.status = 'Active' AND p.quantity > 0"),
     @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
     @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"),
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
@@ -74,12 +80,17 @@ public class Product implements Serializable {
     @Basic(optional = false)
     @Column(name = "status", nullable = false, length = 50)
     private String status;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    private List<OrderItem> orderItemList;
     @JoinColumn(name = "modifiedBy", referencedColumnName = "email")
     @ManyToOne
     private Account modifiedBy;
     @JoinColumn(name = "categoryId", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Category categoryId;
+    
+    @Transient
+    private String error;
 
     public Product() {
     }
@@ -145,6 +156,15 @@ public class Product implements Serializable {
     public float getPrice() {
         return price;
     }
+    
+    public String getStringPrice(){
+        return String.format("%.2f", price);
+    }
+    
+     public String getSubTotal(){
+        return String.format("%.2f", price * quantity);
+    }
+    
 
     public void setPrice(float price) {
         this.price = price;
@@ -182,6 +202,15 @@ public class Product implements Serializable {
         this.status = status;
     }
 
+    @XmlTransient
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
+    }
+
     public Account getModifiedBy() {
         return modifiedBy;
     }
@@ -197,6 +226,16 @@ public class Product implements Serializable {
     public void setCategoryId(Category categoryId) {
         this.categoryId = categoryId;
     }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -220,7 +259,7 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "entities.Product[ id=" + id + " ]";
+        return "Product: " + name + " " + quantity + " " + error;
     }
 
 }

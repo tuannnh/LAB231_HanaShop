@@ -37,8 +37,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i"),
     @NamedQuery(name = "Invoice.findById", query = "SELECT i FROM Invoice i WHERE i.id = :id"),
     @NamedQuery(name = "Invoice.findByCreateDate", query = "SELECT i FROM Invoice i WHERE i.createDate = :createDate"),
-    @NamedQuery(name = "Invoice.findByTotal", query = "SELECT i FROM Invoice i WHERE i.total = :total")})
+    @NamedQuery(name = "Invoice.findByTotal", query = "SELECT i FROM Invoice i WHERE i.total = :total"),
+    @NamedQuery(name = "Invoice.findByPaypalId", query = "SELECT i FROM Invoice i WHERE i.paypalId = :paypalId")})
 public class Invoice implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +54,8 @@ public class Invoice implements Serializable {
     @Basic(optional = false)
     @Column(name = "total", nullable = false)
     private float total;
+    @Column(name = "paypalId", length = 255)
+    private String paypalId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "invoiceId")
     private List<OrderItem> orderItemList;
     @JoinColumn(name = "customer", referencedColumnName = "email", nullable = false)
@@ -69,6 +73,19 @@ public class Invoice implements Serializable {
         this.id = id;
         this.createDate = createDate;
         this.total = total;
+    }
+
+    public Invoice(Date createDate, float total, Account customer) {
+        this.createDate = createDate;
+        this.total = total;
+        this.customer = customer;
+    }
+
+    public Invoice(Date createDate, float total, Account customer, String paypalId) {
+        this.createDate = createDate;
+        this.total = total;
+        this.customer = customer;
+        this.paypalId = paypalId;
     }
 
     public Integer getId() {
@@ -93,6 +110,14 @@ public class Invoice implements Serializable {
 
     public void setTotal(float total) {
         this.total = total;
+    }
+
+    public String getPaypalId() {
+        return paypalId;
+    }
+
+    public void setPaypalId(String paypalId) {
+        this.paypalId = paypalId;
     }
 
     @XmlTransient
@@ -136,5 +161,5 @@ public class Invoice implements Serializable {
     public String toString() {
         return "entities.Invoice[ id=" + id + " ]";
     }
-    
+
 }

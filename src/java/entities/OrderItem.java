@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "OrderItem.findByQuantity", query = "SELECT o FROM OrderItem o WHERE o.quantity = :quantity"),
     @NamedQuery(name = "OrderItem.findByProductPrice", query = "SELECT o FROM OrderItem o WHERE o.productPrice = :productPrice")})
 public class OrderItem implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +63,13 @@ public class OrderItem implements Serializable {
         this.id = id;
         this.quantity = quantity;
         this.productPrice = productPrice;
+    }
+
+    public OrderItem(int quantity, float productPrice, Invoice invoiceId, Product productId) {
+        this.quantity = quantity;
+        this.productPrice = productPrice;
+        this.invoiceId = invoiceId;
+        this.productId = productId;
     }
 
     public Integer getId() {
@@ -128,5 +136,5 @@ public class OrderItem implements Serializable {
     public String toString() {
         return "entities.OrderItem[ id=" + id + " ]";
     }
-    
+
 }

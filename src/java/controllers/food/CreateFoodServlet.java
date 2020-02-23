@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package controllers.food;
 
 import daos.CategoryDAO;
 import daos.ProductDAO;
@@ -63,7 +63,7 @@ public class CreateFoodServlet extends HttpServlet {
                 Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             }
 
-            String imageURL = "/images/" + fileName;
+            String imageURL = "images/" + fileName;
             Product newProduct = new Product(name, imageURL, description, Float.parseFloat(price), createDate, Integer.parseInt(quantity), category, status);
             ProductDAO pdao = new ProductDAO();
             pdao.createProduct(newProduct);

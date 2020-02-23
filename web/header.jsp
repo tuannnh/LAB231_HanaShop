@@ -19,6 +19,8 @@
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
         <link href="assets/css/paper-kit.css?v=2.3.0" rel="stylesheet" />
         <link href="assets/css/demo.css" rel="stylesheet" />
+        <link href="assets/css/sweetalert2.min.css" rel="stylesheet" />
+        <link href="assets/css/mycss.css" rel="stylesheet" />
 
     </head>
 

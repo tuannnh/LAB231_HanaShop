@@ -3,44 +3,53 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package controllers.food;
 
-import java.io.File;
+import daos.ProductDAO;
+import entities.Product;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.nio.file.Files;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author tuannnh
  */
-public class LoadImageServlet extends HttpServlet {
+public class SearchFoodServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    static Logger log = Logger.getLogger(SearchFoodServlet.class);
+    private static final String URL = "index.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String filename = URLDecoder.decode(request.getPathInfo().substring(1), "UTF-8");
-        File file = new File("/Users/tuannnh/Desktop/images", filename);
-        if (file.exists()) {
-            response.setHeader("Content-Type", getServletContext().getMimeType(filename));
-            response.setHeader("Content-Length", String.valueOf(file.length()));
-            response.setHeader("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
-            Files.copy(file.toPath(), response.getOutputStream());
-        }
+        try {
+            String searchName = request.getParameter("txtSearch");
+            String searchCategory = request.getParameter("txtCategory");
+            String searchMin = request.getParameter("txtMin");
+            String searchMax = request.getParameter("txtMax");
+            ProductDAO dao = new ProductDAO();
+            List<Product> products = dao.searchByUser(searchName, searchMin, searchMax, searchCategory);
+            HttpSession session = request.getSession();
+            session.setAttribute("productList", products);
+            request.setAttribute("PAGE", "1");
 
+            //forward search value
+            request.setAttribute("SEARCH_NAME", searchName);
+            request.setAttribute("SEARCH_CATEGORY", searchCategory);
+            request.setAttribute("SEARCH_MIN", searchMin);
+            request.setAttribute("SEARCH_MAX", searchMax);
+
+        } catch (Exception e) {
+            log.info("Error at Search Food Servlet: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            request.getRequestDispatcher(URL).forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

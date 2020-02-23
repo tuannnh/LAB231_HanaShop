@@ -3,28 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package controllers.account;
 
 import daos.AccountDAO;
-import entities.Account;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 /**
  *
  * @author tuannnh
  */
-public class LoginServlet extends HttpServlet {
+public class RegisterServlet extends HttpServlet {
 
-    static Logger log = Logger.getLogger(LoginServlet.class);
-    private static final String ERROR = "login.jsp";
-    private static final String USER = "index.jsp";
-    private static final String ADMIN = "admin.jsp";
+    static Logger log = Logger.getLogger(RegisterServlet.class);
+    private static final String ERROR = "register.jsp";
+    private static final String SUCCESS = "login.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -32,47 +29,40 @@ public class LoginServlet extends HttpServlet {
         String code = request.getParameter("code");
         try {
             if (code == null || code.isEmpty()) {
-                // Not login by google
+                //Register by filling form
                 String email = request.getParameter("txtEmail");
                 String password = request.getParameter("txtPassword");
                 AccountDAO dao = new AccountDAO();
-                Account user = dao.checkLogin(email, password);
-                if (user != null) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("USER", user);
-                    if (user.getPrivilege().equals("Admin")) {
-                        url = ADMIN;
-                    } else {
-                        url = USER;
-                    }
+                boolean result = dao.registerByForm(email, password);
+                if (result) {
+                    url = SUCCESS;
+                } else {
+                    request.setAttribute("ERROR_MESSAGE", "The email is registered!");
                 }
             } else {
-                //Login by google
-                String accessToken = google.GoogleUtils.getTokenLogin(code);
+                // Register by Google
+                String accessToken = google.GoogleUtils.getTokenRegister(code);
+                System.out.println("Access token: " + accessToken);
                 google.GooglePojo userObj = google.GoogleUtils.getUserInfo(accessToken);
                 String email = userObj.getEmail();
+                System.out.println(email + "This is email");
                 AccountDAO dao = new AccountDAO();
-                Account user = dao.findByEmail(email);
-                if (user != null) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("USER", user);
-                    if (user.getPrivilege().equals("Admin")) {
-                        url = ADMIN;
-                    } else {
-                        url = USER;
-                    }
+                boolean result = dao.registerByGoogle(email);
+                if (result) {
+                    url = SUCCESS;
+                } else {
+                    request.setAttribute("ERROR_MESSAGE", "The email is registered!");
                 }
             }
             if (url.equals(ERROR)) {
-                request.setAttribute("ERROR_MESSAGE", "Email or Password is not correct!");
+                request.setAttribute("ERROR_MESSAGE", "Register Error!");
             }
         } catch (Exception e) {
-            log.info("Error at Login Servlet: " + e.getMessage());
+            log.info("Error at Register Servlet: " + e.getMessage());
             e.printStackTrace();
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

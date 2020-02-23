@@ -10,47 +10,72 @@
     </filter-mapping>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>controllers.LoginServlet</servlet-class>
+        <servlet-class>controllers.account.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
-        <servlet-class>controllers.LogoutServlet</servlet-class>
+        <servlet-class>controllers.account.LogoutServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
-        <servlet-class>controllers.RegisterServlet</servlet-class>
+        <servlet-class>controllers.account.RegisterServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CreateFoodServlet</servlet-name>
-        <servlet-class>controllers.CreateFoodServlet</servlet-class>
+        <servlet-class>controllers.food.CreateFoodServlet</servlet-class>
+        <multipart-config>
+            <max-file-size>20848820</max-file-size>
+            <max-request-size>418018841</max-request-size>
+            <file-size-threshold>1048576</file-size-threshold>
+        </multipart-config>
     </servlet>
     <servlet>
         <servlet-name>SearchFoodServlet</servlet-name>
-        <servlet-class>controllers.SearchFoodServlet</servlet-class>
+        <servlet-class>controllers.food.SearchFoodServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateFoodServlet</servlet-name>
-        <servlet-class>controllers.UpdateFoodServlet</servlet-class>
+        <servlet-class>controllers.food.UpdateFoodServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteFoodServlet</servlet-name>
-        <servlet-class>controllers.DeleteFoodServlet</servlet-class>
+        <servlet-class>controllers.food.DeleteFoodServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ViewFoodServlet</servlet-name>
-        <servlet-class>controllers.ViewFoodServlet</servlet-class>
+        <servlet-class>controllers.food.ViewFoodServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminSearchServlet</servlet-name>
-        <servlet-class>controllers.AdminSearchServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>UploadServlet</servlet-name>
-        <servlet-class>controllers.UploadServlet</servlet-class>
+        <servlet-class>controllers.food.AdminSearchServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ImageServlet</servlet-name>
-        <servlet-class>controllers.LoadImageServlet</servlet-class>
+        <servlet-class>controllers.services.LoadImageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddToCartServlet</servlet-name>
+        <servlet-class>controllers.cart.AddToCartServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePageServlet</servlet-name>
+        <servlet-class>controllers.services.ChangePageServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CompletePurchaseServlet</servlet-name>
+        <servlet-class>controllers.cart.CompletePurchaseServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateCartServlet</servlet-name>
+        <servlet-class>controllers.cart.UpdateCartServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReviewPurchaseServlet</servlet-name>
+        <servlet-class>controllers.cart.ReviewPurchaseServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AuthorizePaypalServlet</servlet-name>
+        <servlet-class>controllers.paypal.AuthorizePaypalServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -89,12 +114,32 @@
         <url-pattern>/AdminSearchServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UploadServlet</servlet-name>
-        <url-pattern>/UploadServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>ImageServlet</servlet-name>
         <url-pattern>/images/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddToCartServlet</servlet-name>
+        <url-pattern>/AddToCartServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePageServlet</servlet-name>
+        <url-pattern>/ChangePageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CompletePurchaseServlet</servlet-name>
+        <url-pattern>/CompletePurchaseServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateCartServlet</servlet-name>
+        <url-pattern>/UpdateCartServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReviewPurchaseServlet</servlet-name>
+        <url-pattern>/ReviewPurchaseServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AuthorizePaypalServlet</servlet-name>
+        <url-pattern>/AuthorizePaypalServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -104,5 +149,9 @@
     <!--    <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>-->
-
+    <multipart-config>
+        <max-file-size>20848820</max-file-size>
+        <max-request-size>418018841</max-request-size>
+        <file-size-threshold>1048576</file-size-threshold>
+    </multipart-config>
 </web-app>

@@ -26,6 +26,7 @@
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
         <link href="assets/css/paper-kit.css?v=2.3.0" rel="stylesheet" />
         <link href="assets/css/demo.css" rel="stylesheet" />
+        <link href="assets/css/mycss.css" rel="stylesheet" />
     </head>
     <body class="register-page full-screen sidebar-collapse">
 
@@ -130,5 +131,6 @@
         <script src="assets/js/paper-kit.js?v=2.3.0" type="text/javascript"></script>
         <!--  Plugin for presentation page - isometric cards  -->
         <script src="assets/js/plugins/presentation-page/main.js"></script>
+         <script src="assets/js/myjs.js"></script>
     </body>
 </html>

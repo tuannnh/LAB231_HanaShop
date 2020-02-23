@@ -8,6 +8,7 @@ package entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -31,6 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Account.findByPrivilege", query = "SELECT a FROM Account a WHERE a.privilege = :privilege"),
     @NamedQuery(name = "Account.findByPassword", query = "SELECT a FROM Account a WHERE a.password = :password")})
 public class Account implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    private List<Invoice> invoiceList;
     @OneToMany(mappedBy = "modifiedBy")
     private List<Product> productList;
     private static final long serialVersionUID = 1L;
@@ -118,6 +121,15 @@ public class Account implements Serializable {
 
     public void setProductList(List<Product> productList) {
         this.productList = productList;
+    }
+
+    @XmlTransient
+    public List<Invoice> getInvoiceList() {
+        return invoiceList;
+    }
+
+    public void setInvoiceList(List<Invoice> invoiceList) {
+        this.invoiceList = invoiceList;
     }
     
 }
