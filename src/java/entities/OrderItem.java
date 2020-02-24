@@ -92,6 +92,14 @@ public class OrderItem implements Serializable {
         return productPrice;
     }
 
+    public String getStringPrice() {
+        return String.format("%.2f", productPrice);
+    }
+
+    public String getSubTotal() {
+        return String.format("%.2f", productPrice * quantity);
+    }
+
     public void setProductPrice(float productPrice) {
         this.productPrice = productPrice;
     }

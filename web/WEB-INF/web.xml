@@ -77,6 +77,26 @@
         <servlet-name>AuthorizePaypalServlet</servlet-name>
         <servlet-class>controllers.paypal.AuthorizePaypalServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchHistoryServlet</servlet-name>
+        <servlet-class>controllers.cart.SearchHistoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateCategoryServlet</servlet-name>
+        <servlet-class>controllers.category.CreateCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateCategoryServlet</servlet-name>
+        <servlet-class>controllers.category.UpdateCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteCategoryServlet</servlet-name>
+        <servlet-class>controllers.category.DeleteCategoryServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePageAdminServlet</servlet-name>
+        <servlet-class>controllers.services.ChangePageAdminServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -140,6 +160,26 @@
     <servlet-mapping>
         <servlet-name>AuthorizePaypalServlet</servlet-name>
         <url-pattern>/AuthorizePaypalServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchHistoryServlet</servlet-name>
+        <url-pattern>/SearchHistoryServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateCategoryServlet</servlet-name>
+        <url-pattern>/CreateCategoryServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateCategoryServlet</servlet-name>
+        <url-pattern>/UpdateCategoryServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteCategoryServlet</servlet-name>
+        <url-pattern>/DeleteCategoryServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePageAdminServlet</servlet-name>
+        <url-pattern>/ChangePageAdminServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

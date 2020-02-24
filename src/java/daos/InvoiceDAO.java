@@ -5,14 +5,15 @@
  */
 package daos;
 
+import entities.Account;
 import entities.Invoice;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import models.Cart;
 
 /**
@@ -41,6 +42,30 @@ public class InvoiceDAO implements Serializable {
         em.getTransaction().commit();
         em.close();
         return newInvoice;
+    }
+
+    public List<Invoice> getAllInvoce() throws Exception {
+        EntityManager em = emf.createEntityManager();
+        return em.createNamedQuery("Invoice.findAll").getResultList();
+    }
+
+    public List<Invoice> searchHistoryByProductName(Account customer, String searchName, Date searchDateStart, Date searchDateEnd) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        System.out.println(searchName);
+        System.out.println(searchDateStart);
+        System.out.println(searchDateEnd);
+        Query qr = em.createQuery("SELECT i FROM Invoice i "
+                + "WHERE i.customer = :customer "
+                + "AND i.createDate >= :searchDateStart AND i.createDate <= :searchDateEnd "
+                + "AND i IN "
+                + "(SELECT o.invoiceId FROM OrderItem o WHERE o.productId IN "
+                + "(SELECT p FROM Product p WHERE p.name LIKE :searchName))");
+        qr.setParameter("customer", customer);
+        qr.setParameter("searchDateStart", searchDateStart);
+        qr.setParameter("searchDateEnd", searchDateEnd);
+        qr.setParameter("searchName", "%" + searchName + "%");
+        List<Invoice> result = qr.getResultList();
+        return result;
     }
 
 }

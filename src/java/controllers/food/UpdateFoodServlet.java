@@ -5,17 +5,36 @@
  */
 package controllers.food;
 
+import static controllers.food.CreateFoodServlet.log;
+import daos.CategoryDAO;
+import daos.ProductDAO;
+import entities.Account;
+import entities.Category;
+import entities.Product;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author tuannnh
  */
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 10, // 10 MB 
+        maxFileSize = 1024 * 1024 * 50, // 50 MB
+        maxRequestSize = 1024 * 1024 * 100)   	// 100 MB
 public class UpdateFoodServlet extends HttpServlet {
 
     /**
@@ -29,19 +48,91 @@ public class UpdateFoodServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UpdateFoodServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UpdateFoodServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+            HttpSession session = request.getSession();
+            String id = getValue(request.getPart("txtId"));
+            String name = getValue(request.getPart("txtName"));
+            String description = getValue(request.getPart("txtDescription"));
+            String price = getValue(request.getPart("txtPrice"));
+            String quantity = getValue(request.getPart("txtQuantity"));
+            String categoryId = getValue(request.getPart("txtCategory"));
+            String status = getValue(request.getPart("txtStatus"));
+            String imageURL = getValue(request.getPart("txtImageURL"));
+
+            CategoryDAO cdao = new CategoryDAO();
+            Category category = cdao.findById(Integer.parseInt(categoryId));
+
+            Date modifiedDate = new Date();
+            Account modifiedBy = (Account) session.getAttribute("USER");
+            //Save Image
+
+            Part filePart = request.getPart("image"); // Retrieves <input type="file" name="image">
+            if (filePart.getSize() > 0) {
+
+                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+                File savePath = new File("/Users/tuannnh/Desktop/images");
+                if (!savePath.exists()) {
+                    savePath.mkdir();
+                }
+                File file = new File(savePath, fileName);
+                System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
+
+                try (InputStream fileContent = filePart.getInputStream()) {
+                    Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                }
+                imageURL = "images/" + fileName;
+            }
+
+            ProductDAO pdao = new ProductDAO();
+            Product updateProduct = pdao.findById(Integer.parseInt(id));
+
+            updateProduct.setName(name);
+            updateProduct.setImageURL(imageURL);
+            updateProduct.setDescription(description);
+            updateProduct.setPrice(Float.parseFloat(price));
+            updateProduct.setQuantity(Integer.parseInt(quantity));
+            updateProduct.setCategoryId(category);
+            updateProduct.setStatus(status);
+            updateProduct.setModifiedDate(modifiedDate);
+            updateProduct.setModifiedBy(modifiedBy);
+            pdao.updateProduct(updateProduct);
+
+            //After make change of list, refresh
+            session.setAttribute("ADMIN_PRODUCTS", null);
+            session.setAttribute("USER_PRODUCTS", null);
+        } catch (Exception e) {
+            log.info("Error at Create Food Servlet: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+//            request.getRequestDispatcher(URL).forward(request, response);
+            response.sendRedirect("AdminSearch");
         }
+
+    }
+
+    private static String getValue(Part part) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), "UTF-8"));
+        StringBuilder value = new StringBuilder();
+        char[] buffer = new char[1024];
+        for (int length = 0; (length = reader.read(buffer)) > 0;) {
+            value.append(buffer, 0, length);
+        }
+        return value.toString();
+    }
+
+    private InputStream getImageStream(HttpServletRequest request, String image) {
+        try {
+            Part part = request.getPart(image);
+            String header = part.getHeader("content-disposition");
+            InputStream input = null;
+            if (header.contains("filename")) {
+                input = part.getInputStream();
+            }
+            return input;
+        } catch (IOException | ServletException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

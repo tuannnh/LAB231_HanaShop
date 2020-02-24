@@ -5,18 +5,25 @@
  */
 package controllers.food;
 
+import daos.ProductDAO;
+import entities.Product;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author tuannnh
  */
 public class AdminSearchServlet extends HttpServlet {
+
+    static Logger log = Logger.getLogger(AdminSearchServlet.class);
+    private static final String URL = "admin-food.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,18 +36,43 @@ public class AdminSearchServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AdminSearchServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AdminSearchServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+            HttpSession session = request.getSession();
+
+            String searchName = request.getParameter("txtAdminSearch");
+            if (searchName == null) {
+                searchName = (String) session.getAttribute("ADMIN_SEARCH_NAME");
+            }
+            String searchCategory = request.getParameter("txtAdminCategory");
+            if (searchCategory == null) {
+                searchCategory = (String) session.getAttribute("ADMIN_SEARCH_CATEGORY");
+            }
+            String searchStatus = request.getParameter("txtAdminStatus");
+            if (searchStatus == null) {
+                searchStatus = (String) session.getAttribute("ADMIN_SEARCH_STATUS");
+            }
+            String searchPageIndex = request.getParameter("searchPageIndex");
+
+            ProductDAO dao = new ProductDAO();
+            List<Product> products = dao.searchByAdmin(searchName, searchStatus, searchCategory);
+            session.setAttribute("ADMIN_PRODUCTS", products);
+            if (searchPageIndex == null) {
+                request.setAttribute("PAGE", "1");
+
+            } else {
+                request.setAttribute("PAGE", searchPageIndex);
+            }
+
+            //forward search value
+            session.setAttribute("ADMIN_SEARCH_NAME", searchName);
+            session.setAttribute("ADMIN_SEARCH_CATEGORY", searchCategory);
+            session.setAttribute("ADMIN_SEARCH_STATUS", searchStatus);
+
+        } catch (Exception e) {
+            log.info("Error at Admin Search Servlet: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            request.getRequestDispatcher(URL).forward(request, response);
         }
     }
 

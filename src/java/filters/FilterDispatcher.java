@@ -110,7 +110,7 @@ public class FilterDispatcher implements Filter {
                     url = resource;
                 }
 
-                if (resource.contains("CreateFood")) {
+                if (resource.contains("CreateFood") || resource.contains("UpdateFood")) {
                     url = resource;
                 }
             }

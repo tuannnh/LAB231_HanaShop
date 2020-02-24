@@ -28,21 +28,27 @@ public class SearchFoodServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String searchName = request.getParameter("txtSearch");
-            String searchCategory = request.getParameter("txtCategory");
-            String searchMin = request.getParameter("txtMin");
-            String searchMax = request.getParameter("txtMax");
+            String searchName = request.getParameter("txtUserSearch");
+            String searchCategory = request.getParameter("txtUserCategory");
+            String searchMin = request.getParameter("txtUserMin");
+            String searchMax = request.getParameter("txtUserMax");
+            String searchPageIndex = request.getParameter("searchPageIndex");
             ProductDAO dao = new ProductDAO();
             List<Product> products = dao.searchByUser(searchName, searchMin, searchMax, searchCategory);
             HttpSession session = request.getSession();
-            session.setAttribute("productList", products);
-            request.setAttribute("PAGE", "1");
+            session.setAttribute("USER_PRODUCTS", products);
+            if (searchPageIndex == null) {
+                request.setAttribute("PAGE", "1");
+
+            } else {
+                request.setAttribute("PAGE", searchPageIndex);
+            }
 
             //forward search value
-            request.setAttribute("SEARCH_NAME", searchName);
-            request.setAttribute("SEARCH_CATEGORY", searchCategory);
-            request.setAttribute("SEARCH_MIN", searchMin);
-            request.setAttribute("SEARCH_MAX", searchMax);
+            session.setAttribute("USER_SEARCH_NAME", searchName);
+            session.setAttribute("USER_SEARCH_CATEGORY", searchCategory);
+            session.setAttribute("USER_SEARCH_MIN", searchMin);
+            session.setAttribute("USER_SEARCH_MAX", searchMax);
 
         } catch (Exception e) {
             log.info("Error at Search Food Servlet: " + e.getMessage());

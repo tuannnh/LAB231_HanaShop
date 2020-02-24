@@ -25,7 +25,6 @@ import org.apache.log4j.Logger;
 public class AddToCartServlet extends HttpServlet {
 
     static Logger log = Logger.getLogger(AddToCartServlet.class);
-    private static final String URL = "index.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,6 +37,7 @@ public class AddToCartServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+         String callPage = "index.jsp";
         try {
             String id = request.getParameter("txtId");
             HttpSession session = request.getSession();
@@ -45,8 +45,7 @@ public class AddToCartServlet extends HttpServlet {
             Product product = dao.findById(Integer.parseInt(id));
 
             Cart cart = (Cart) session.getAttribute("CART");
-//            Account customer = (Account) session.getAttribute("USER");
-            Account customer = new Account("mail@hungtuan.me", "123", "User");
+            Account customer = (Account) session.getAttribute("USER");
             if (cart == null) {
                 cart = new Cart(customer);
             }
@@ -63,17 +62,20 @@ public class AddToCartServlet extends HttpServlet {
             String searchMin = request.getParameter("txtMin");
             String searchMax = request.getParameter("txtMax");
             String pageIndex = request.getParameter("pageIndex");
+            callPage = request.getParameter("callPage");
+            
 
             request.setAttribute("SEARCH_NAME", searchName);
             request.setAttribute("SEARCH_CATEGORY", searchCategory);
             request.setAttribute("SEARCH_MIN", searchMin);
             request.setAttribute("SEARCH_MAX", searchMax);
             request.setAttribute("PAGE", pageIndex);
+            
         } catch (Exception e) {
             log.info("Error at Add To Cart Servlet: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            request.getRequestDispatcher(URL).forward(request, response);
+            request.getRequestDispatcher(callPage).forward(request, response);
         }
     }
 

@@ -4,6 +4,8 @@
     Author     : tuannnh
 --%>
 
+<%@page import="models.Cart"%>
+<%@page import="daos.SuggestProductDAO"%>
 <%@page import="entities.Product"%>
 <%@page import="daos.ProductDAO"%>
 <%@page import="entities.Category"%>
@@ -33,7 +35,7 @@
                                 <%
                                     CategoryDAO cdao = new CategoryDAO();
                                     List<Category> categories = cdao.getAllCategories();
-                                    request.setAttribute("categoryList", categories);
+                                    pageContext.setAttribute("categoryList", categories);
                                 %>
 
                                 <form action="SearchFood" method="POST" role="search" class="form-inline col-md-12 ml-auto mr-auto">
@@ -42,17 +44,17 @@
 
                                             <span class=" addon-xtreme no-border" id="basic-addon1"><i
                                                     class="fa fa-search"></i></span>
-                                            <input name="txtSearch" value="${requestScope.SEARCH_NAME}" type="text" class="form-control input-xtreme no-border" placeholder="Search here..." />
+                                            <input name="txtUserSearch" value="${sessionScope.USER_SEARCH_NAME}" type="text" class="form-control input-xtreme no-border" placeholder="Search here..." />
 
                                         </div>
                                         <div class="col-md-6 mt-3">
-                                            <select name="txtCategory" class="selectpicker col-md-5 show-tick" data-style="btn-info">
+                                            <select name="txtUserCategory" class="selectpicker col-md-5 show-tick" data-style="btn-info">
                                                 <option class="select-option" value="0" 
-                                                        <c:if test="${requestScope.SEARCH_CATEGORY eq '0'}">selected</c:if> >All category
+                                                        <c:if test="${sessionScope.USER_SEARCH_CATEGORY eq '0'}">selected</c:if> >All category
                                                         </option>
                                                 <c:forEach items="${categoryList}" var="category">
                                                     <option class="select-option" value="${category.id}" 
-                                                            <c:if test="${requestScope.SEARCH_CATEGORY eq category.id}">selected</c:if> >${category}
+                                                            <c:if test="${sessionScope.USER_SEARCH_CATEGORY eq category.id}">selected</c:if> >${category}
                                                             </option>
                                                 </c:forEach>
                                             </select>
@@ -63,10 +65,10 @@
 
 
                                         <label class="mr-2" for="lowest">From</label>
-                                        <input name="txtMin" value="${requestScope.SEARCH_MIN}" placeholder="1" id="lowest" type="text"
+                                        <input name="txtUserMin" value="${sessionScope.USER_SEARCH_MIN}" placeholder="1" id="lowest" type="text"
                                                class="form-inline input-group-append w-25" /><label class="ml-2">USD -</label>
                                         <label for="highest" class="ml-2 mr-2">To</label>
-                                        <input name="txtMax" value="${requestScope.SEARCH_MAX}" placeholder="5000" id="highest" type="text"
+                                        <input name="txtUserMax" value="${sessionScope.USER_SEARCH_MAX}" placeholder="5000" id="highest" type="text"
                                                class="form-inline input-group-sm w-25" /><label class="ml-2">USD</label>
 
                                     </div>
@@ -76,25 +78,19 @@
                         </div>
                         <br/>
                         <div class="row  text-center">
-                            <c:if test="${sessionScope.productList eq null}">
+                            <c:if test="${sessionScope.USER_PRODUCTS eq null}">
                                 <%
                                     ProductDAO pdao = new ProductDAO();
                                     List<Product> products = pdao.getAllAvailableProducts();
-                                    System.out.println("List: " + products.toString());
-                                    session.setAttribute("productList", products);
+                                    session.setAttribute("USER_PRODUCTS", products);
                                 %>
-                                <%--<c:set var="PAGE" value="1" scope="request"/>--%>
                             </c:if>
                             <c:if test="${requestScope.PAGE eq null}">
                                 <c:set var="PAGE" value="1" scope="request"/>
                             </c:if>
-                            <%
-                                List<Product> result = (List<Product>) session.getAttribute("productList");
-                                System.out.println("Result " + result.toString());
-                            %>
-                            <c:set var="TOTAL_PAGE" value="${Math.ceil(sessionScope.productList.size()/20)}" scope="request"/>
-                            <c:set var="SEARCH_LIST" value="${requestScope.productList}" scope="session"/>
-                            <c:forEach items="${sessionScope.productList}" var="product" begin="${(requestScope.PAGE - 1)*20}" end="${(requestScope.PAGE - 1)*20 + 19}">
+                            <c:set var="TOTAL_PAGE" value="${Math.ceil(sessionScope.USER_PRODUCTS.size()/20)}" scope="request"/>
+                            <c:set var="USER_SEARCH_LIST" value="${requestScope.USER_PRODUCTS}" scope="session"/>
+                            <c:forEach items="${sessionScope.USER_PRODUCTS}" var="product" begin="${(requestScope.PAGE - 1)*20}" end="${(requestScope.PAGE - 1)*20 + 19}">
 
                                 <div class="col-md-3 col-sm-4">
                                     <div class="card card-product card-plain">
@@ -116,6 +112,7 @@
                                                 <div class="row justify-content-center">
                                                     <form action="AddToCart" method="POST">
                                                         <input type="hidden" name="txtId" value="${product.id}" />
+                                                        <input type="hidden" name="callPage" value="index.jsp" />
                                                         <button type="submit" class="btn btn-info btn-center btn-round">Add to Cart &nbsp;<i
                                                                 class="fa fa-chevron-right"></i></button>
                                                     </form>
@@ -136,26 +133,91 @@
                                 <ul class="pagination justify-content-end">
 
                                     <li class="page-item  <c:if test="${requestScope.PAGE eq '1'}">disabled</c:if>" >
-                                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                        </li>
+                                        <c:url var="ChangePageLink" value="ChangePage">
+                                            <c:param name="txtUserSearch" value="${sessionScope.USER_SEARCH_NAME}"/>
+                                            <c:param name="txtUserCategory" value="${sessionScope.USER_SEARCH_CATEGORY}"/>
+                                            <c:param name="txtUserMin" value="${sessionScope.USER_SEARCH_MIN}"/>
+                                            <c:param name="txtUserMax" value="${sessionScope.USER_SEARCH_MAX}"/>
+                                            <c:param name="pageIndex" value="${requestScope.PAGE - 1}"/>
+                                        </c:url>
+
+                                        <a class="page-link" href="${ChangePageLink}" tabindex="-1">Previous</a>
+                                    </li>
 
                                     <c:forEach begin="1" end="${TOTAL_PAGE}" varStatus="counter">
 
                                         <c:url var="ChangePageLink" value="ChangePage">
-                                            <c:param name="txtSearch" value="${requestScope.SEARCH_NAME}"/>
-                                            <c:param name="txtCategory" value="${requestScope.SEARCH_CATEGORY}"/>
-                                            <c:param name="txtMin" value="${requestScope.SEARCH_MIN}"/>
-                                            <c:param name="txtMax" value="${requestScope.SEARCH_MAX}"/>
+                                            <c:param name="txtUserSearch" value="${sessionScope.USER_SEARCH_NAME}"/>
+                                            <c:param name="txtUserCategory" value="${sessionScope.USER_SEARCH_CATEGORY}"/>
+                                            <c:param name="txtUserMin" value="${sessionScope.USER_SEARCH_MIN}"/>
+                                            <c:param name="txtUserMax" value="${sessionScope.USER_SEARCH_MAX}"/>
                                             <c:param name="pageIndex" value="${counter.count}"/>
                                         </c:url>
 
                                         <li class="page-item <c:if test="${requestScope.PAGE eq counter.count}">active</c:if>"><a class="page-link" href="${ChangePageLink}">${counter.count}</a></li>
                                         </c:forEach>
                                     <li class="page-item <c:if test="${requestScope.PAGE eq TOTAL_PAGE}">disabled</c:if>" >
-                                            <a class="page-link" href="#">Next</a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                                        <c:url var="ChangePageLink" value="ChangePage">
+                                            <c:param name="txtUserSearch" value="${sessionScope.USER_SEARCH_NAME}"/>
+                                            <c:param name="txtUserCategory" value="${sessionScope.USER_SEARCH_CATEGORY}"/>
+                                            <c:param name="txtUserMin" value="${sessionScope.USER_SEARCH_MIN}"/>
+                                            <c:param name="txtUserMax" value="${sessionScope.USER_SEARCH_MAX}"/>
+                                            <c:param name="pageIndex" value="${requestScope.PAGE + 1}"/>
+                                        </c:url>
+
+                                        <a class="page-link" href="${ChangePageLink}" tabindex="-1">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </c:if>
+
+                        <%
+                            SuggestProductDAO dao = new SuggestProductDAO();
+                            Cart cart = (Cart) session.getAttribute("CART");
+                            List<Product> suggestList = dao.getSuggestProducts(cart);
+                            pageContext.setAttribute("USER_SUGGEST", suggestList);
+                        %>
+                        <c:if test="${USER_SUGGEST.size() > 0}">
+                            <div class="col-md-12">
+                                <h4 class="title">Recommendation</h4>
+                            </div>
+
+                            <div class="row  text-center">
+                                <c:forEach items="${USER_SUGGEST}" var="product" begin="0" end="9">
+
+                                    <div class="col-md-2 col-sm-4">
+                                        <div class="card card-product card-plain">
+                                            <div class="card-image">
+                                                <img src="${product.imageURL}" alt="Rounded Image" class="img-rounded img-responsive">
+                                                <div class="card-body">
+
+                                                    <p class=""><strong>${product.name}</strong> </p>
+                                                    <p class="card-title"><strong>$${product.price}</strong></p>
+                                                    <hr>
+                                                    <p>${product.description}</p>
+                                                    <span>${product.createDate}</span>
+                                                    <h6>Category:
+                                                        <span class="badge badge-pill badge-default">${product.categoryId}</span>
+                                                    </h6>
+                                                    <p>Quantity: <span class="badge badge-pill badge-info">${product.quantity}</span></p>
+                                                    <div class="row justify-content-center">
+                                                        <form action="AddToCart" method="POST">
+                                                            <input type="hidden" name="txtId" value="${product.id}" />
+                                                            <input type="hidden" name="callPage" value="cart.jsp" />
+                                                            <button type="submit" class="btn btn-info btn-center btn-round">Add to Cart &nbsp;<i
+                                                                    class="fa fa-chevron-right"></i></button>
+                                                        </form>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </c:forEach>
+
+                            </div>
                         </c:if>
 
                     </div>

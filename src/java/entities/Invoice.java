@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -98,6 +99,11 @@ public class Invoice implements Serializable {
 
     public Date getCreateDate() {
         return createDate;
+    }
+
+    public String getPurchaseDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(createDate);
     }
 
     public void setCreateDate(Date createDate) {

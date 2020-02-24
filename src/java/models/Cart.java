@@ -5,7 +5,6 @@
  */
 package models;
 
-import com.sun.org.apache.xerces.internal.util.FeatureState;
 import daos.ProductDAO;
 import entities.Account;
 import entities.Product;

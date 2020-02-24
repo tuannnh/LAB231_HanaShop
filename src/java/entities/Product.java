@@ -6,6 +6,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -36,8 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "tbl_Product", catalog = "ShopDB", schema = "dbo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
-    @NamedQuery(name = "Product.findAllAvailable", query = "SELECT p FROM Product p WHERE p.status = 'Active' AND p.quantity > 0"),
+    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p ORDER BY p.createDate DESC"),
+    @NamedQuery(name = "Product.findAllAvailable", query = "SELECT p FROM Product p WHERE p.status = 'Active' AND p.quantity > 0 ORDER BY p.createDate DESC"),
     @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
     @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"),
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
@@ -170,8 +171,9 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public String getCreateDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(createDate);
     }
 
     public void setCreateDate(Date createDate) {

@@ -30,7 +30,7 @@
             <div class="container">
                 <div class="navbar-translate">
                     <a class="navbar-brand" href="${baseURL}/index.jsp" rel="tooltip"
-                       title=" Hana Shop" data-placement="bottom" target="_blank">
+                       title=" Hana Shop" data-placement="bottom">
                         Hana Shop
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
@@ -59,8 +59,11 @@
                                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false">
                                         Welcome, ${sessionScope.USER} </a>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-danger">
-                                        <a href="admin.jsp" class="dropdown-item">
-                                            Admin Management
+                                        <a href="admin-food.jsp" class="dropdown-item">
+                                            Food Management
+                                        </a>
+                                        <a href="admin-category.jsp" class="dropdown-item">
+                                            Category Management
                                         </a>
                                         <a href="Logout" class="dropdown-item">
                                             Logout

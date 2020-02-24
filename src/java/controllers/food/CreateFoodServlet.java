@@ -23,6 +23,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import org.apache.log4j.Logger;
 
@@ -32,7 +33,7 @@ import org.apache.log4j.Logger;
 public class CreateFoodServlet extends HttpServlet {
 
     static Logger log = Logger.getLogger(CreateFoodServlet.class);
-    private static final String URL = "AdminSearchServlet";
+    private static final String URL = "AdminSearch";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -67,11 +68,17 @@ public class CreateFoodServlet extends HttpServlet {
             Product newProduct = new Product(name, imageURL, description, Float.parseFloat(price), createDate, Integer.parseInt(quantity), category, status);
             ProductDAO pdao = new ProductDAO();
             pdao.createProduct(newProduct);
+
+            //After make change of list, refresh
+            HttpSession session = request.getSession();
+            session.setAttribute("ADMIN_PRODUCTS", null);
+            session.setAttribute("USER_PRODUCTS", null);
         } catch (Exception e) {
             log.info("Error at Create Food Servlet: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            request.getRequestDispatcher(URL).forward(request, response);
+//            request.getRequestDispatcher(URL).forward(request, response);
+            response.sendRedirect(URL);
         }
 
     }

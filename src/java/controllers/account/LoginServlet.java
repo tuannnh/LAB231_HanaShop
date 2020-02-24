@@ -24,7 +24,7 @@ public class LoginServlet extends HttpServlet {
     static Logger log = Logger.getLogger(LoginServlet.class);
     private static final String ERROR = "login.jsp";
     private static final String USER = "index.jsp";
-    private static final String ADMIN = "admin.jsp";
+    private static final String ADMIN = "admin-food.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

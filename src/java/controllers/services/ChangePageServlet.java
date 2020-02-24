@@ -37,21 +37,21 @@ public class ChangePageServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            String searchName = request.getParameter("txtSearch");
-            String searchCategory = request.getParameter("txtCategory");
-            String searchMin = request.getParameter("txtMin");
-            String searchMax = request.getParameter("txtMax");
+            String searchName = request.getParameter("txtUserSearch");
+            String searchCategory = request.getParameter("txtUserCategory");
+            String searchMin = request.getParameter("txtUserMin");
+            String searchMax = request.getParameter("txtUserMax");
             String pageIndex = request.getParameter("pageIndex");
 
             HttpSession session = request.getSession();
-            List<Product> products = (List<Product>) session.getAttribute("SEARCH_LIST");
+            List<Product> products = (List<Product>) session.getAttribute("USER_SEARCH_LIST");
 
-            request.setAttribute("SEARCH_NAME", searchName);
-            request.setAttribute("SEARCH_CATEGORY", searchCategory);
-            request.setAttribute("SEARCH_MIN", searchMin);
-            request.setAttribute("SEARCH_MAX", searchMax);
+            request.setAttribute("USER_SEARCH_NAME", searchName);
+            request.setAttribute("USER_SEARCH_CATEGORY", searchCategory);
+            request.setAttribute("USER_SEARCH_MIN", searchMin);
+            request.setAttribute("USER_SEARCH_MAX", searchMax);
             request.setAttribute("PAGE", pageIndex);
-            request.setAttribute("productList", products);
+            request.setAttribute("USER_PRODUCTS", products);
         } catch (Exception e) {
             log.info("Error at Change Page Servlet: " + e.getMessage());
         } finally {

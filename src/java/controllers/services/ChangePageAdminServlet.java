@@ -3,21 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers.account;
+package controllers.services;
 
+import entities.Product;
 import java.io.IOException;
-import java.util.Enumeration;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author tuannnh
  */
-public class LogoutServlet extends HttpServlet {
+public class ChangePageAdminServlet extends HttpServlet {
+
+    static Logger log = Logger.getLogger(ChangePageAdminServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,13 +34,26 @@ public class LogoutServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.removeAttribute("USER");
-        Enumeration listAttributes = session.getAttributeNames();
-        while (listAttributes.hasMoreElements()) {
-            session.removeAttribute((String)listAttributes.nextElement());
+        try {
+            String searchName = request.getParameter("txtAdminSearch");
+            String searchCategory = request.getParameter("txtAdminCategory");
+            String searchStatus = request.getParameter("txtAdminStatus");
+            String pageIndex = request.getParameter("pageIndex");
+
+            HttpSession session = request.getSession();
+            List<Product> products = (List<Product>) session.getAttribute("ADMIN_SEARCH_LIST");
+
+            request.setAttribute("ADMIN_SEARCH_NAME", searchName);
+            request.setAttribute("ADMIN_SEARCH_CATEGORY", searchCategory);
+            request.setAttribute("ADMIN_SEARCH_STATUS", searchStatus);
+            request.setAttribute("PAGE", pageIndex);
+            request.setAttribute("ADMIN_PRODUCTS", products);
+        } catch (Exception e) {
+            log.info("Error at Change Page Admin Servlet: " + e.getMessage());
+        } finally {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+
         }
-        response.sendRedirect("index.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

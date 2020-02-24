@@ -5,18 +5,24 @@
  */
 package controllers.food;
 
+import static controllers.food.CreateFoodServlet.log;
+import daos.ProductDAO;
+import entities.Product;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author tuannnh
  */
 public class DeleteFoodServlet extends HttpServlet {
+
+    static Logger log = Logger.getLogger(DeleteFoodServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,18 +35,15 @@ public class DeleteFoodServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet DeleteFoodServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet DeleteFoodServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+            String id = request.getParameter("txtId");
+            ProductDAO dao = new ProductDAO();
+            dao.deleteProduct(Integer.parseInt(id));
+            
+        } catch (Exception e) {
+            log.info("Error at Delete Food Servlet: " + e.getMessage());
+        } finally {
+            response.sendRedirect("AdminSearch");
         }
     }
 

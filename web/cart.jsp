@@ -3,13 +3,17 @@
     Created on : Feb 19, 2020, 2:39:39 PM
     Author     : tuannnh
 --%>
+<%@page import="java.util.List"%>
+<%@page import="models.Cart"%>
+<%@page import="entities.Product"%>
+<%@page import="daos.SuggestProductDAO"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Cart</title>
     </head>
     <body>
         <%@include file="header.jsp" %>
@@ -105,6 +109,55 @@
                             </div>
                         </div>
 
+
+                        <%
+                            SuggestProductDAO dao = new SuggestProductDAO();
+                            Cart cart = (Cart) session.getAttribute("CART");
+                            List<Product> suggestList = dao.getSuggestProducts(cart);
+                            pageContext.setAttribute("USER_SUGGEST", suggestList);
+                        %>
+                        <c:if test="${USER_SUGGEST.size() > 0}">
+                            <div class="col-md-12">
+                                <h4 class="title">Recommendation</h4>
+                            </div>
+
+                            <div class="row  text-center">
+                                <c:forEach items="${USER_SUGGEST}" var="product" begin="0" end="9">
+
+                                    <div class="col-md-2 col-sm-4">
+                                        <div class="card card-product card-plain">
+                                            <div class="card-image">
+                                                <img src="${product.imageURL}" alt="Rounded Image" class="img-rounded img-responsive">
+                                                <div class="card-body">
+
+                                                    <p class=""><strong>${product.name}</strong> </p>
+                                                    <p class="card-title"><strong>$${product.price}</strong></p>
+                                                    <hr>
+                                                    <p>${product.description}</p>
+                                                    <span>${product.createDate}</span>
+                                                    <h6>Category:
+                                                        <span class="badge badge-pill badge-default">${product.categoryId}</span>
+                                                    </h6>
+                                                    <p>Quantity: <span class="badge badge-pill badge-info">${product.quantity}</span></p>
+                                                    <div class="row justify-content-center">
+                                                        <form action="AddToCart" method="POST">
+                                                            <input type="hidden" name="txtId" value="${product.id}" />
+                                                            <input type="hidden" name="callPage" value="cart.jsp" />
+                                                            <button type="submit" class="btn btn-info btn-center btn-round">Add to Cart &nbsp;<i
+                                                                    class="fa fa-chevron-right"></i></button>
+                                                        </form>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </c:forEach>
+
+                            </div>
+                        </c:if>
 
                     </div>
                 </div>

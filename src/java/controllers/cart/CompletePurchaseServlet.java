@@ -11,10 +11,9 @@ import com.paypal.api.payments.Transaction;
 import daos.InvoiceDAO;
 import daos.OrderItemDAO;
 import daos.ProductDAO;
+import daos.SuggestProductDAO;
 import entities.Invoice;
-import entities.Product;
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -67,9 +66,12 @@ public class CompletePurchaseServlet extends HttpServlet {
                     ProductDAO productDAO = new ProductDAO();
                     productDAO.updateQuantity(cart);
 
+                    //Add suggestion
+                    SuggestProductDAO suggestProductDAO = new SuggestProductDAO();
+                    suggestProductDAO.addSuggestProduct(newInvoce);
                     //After add, shopping cart has no product, set null
                     session.setAttribute("CART", null);
-                    session.setAttribute("productList", null);
+                    session.setAttribute("USER_PRODUCTS", null);
                     request.setAttribute("TOTAL", newInvoce.getTotal());
 
                     url = SUCCESS;
@@ -94,9 +96,11 @@ public class CompletePurchaseServlet extends HttpServlet {
                     ProductDAO productDAO = new ProductDAO();
                     productDAO.updateQuantity(cart);
 
+                    SuggestProductDAO suggestProductDAO = new SuggestProductDAO();
+                    suggestProductDAO.addSuggestProduct(newInvoce);
                     //After add, shopping cart has no product, set null
                     session.setAttribute("CART", null);
-                    session.setAttribute("productList", null);
+                    session.setAttribute("USER_PRODUCTS", null);
                     request.setAttribute("TOTAL", newInvoce.getTotal());
 
                     request.setAttribute("PAYER", payerInfo);
