@@ -5,12 +5,14 @@
  */
 package controllers.category;
 
+import daos.CategoryDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -18,29 +20,24 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CreateCategoryServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    static Logger log = Logger.getLogger(CreateCategoryServlet.class);
+    private static final String URL = "admin-category.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateCategoryServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateCategoryServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        
+        try {
+            String name = request.getParameter("txtName");
+            CategoryDAO dao = new CategoryDAO();
+            boolean result = dao.createCategory(name);
+            if(!result){
+                request.setAttribute("MESSAGE", "This category: " + name + " is existed!");
+                request.getRequestDispatcher(URL).forward(request, response);
+            }
+        } catch (Exception e) {
+            log.info("Error at Create Category Servlet: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            response.sendRedirect(URL);
         }
     }
 

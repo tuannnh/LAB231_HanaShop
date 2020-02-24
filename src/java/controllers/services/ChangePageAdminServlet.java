@@ -51,7 +51,7 @@ public class ChangePageAdminServlet extends HttpServlet {
         } catch (Exception e) {
             log.info("Error at Change Page Admin Servlet: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("admin-food.jsp").forward(request, response);
 
         }
     }

@@ -92,7 +92,7 @@ public class ProductDAO implements Serializable {
 
     public List<Product> searchByAdmin(String searchName, String searchStatus, String categoryId) throws Exception {
         EntityManager em = emf.createEntityManager();
-        Query qr = null;
+        Query qr;
         if (categoryId.equals("0") && !searchStatus.equals("All")) {
             qr = em.createQuery("SELECT p FROM Product p "
                     + "WHERE p.name "
@@ -125,7 +125,7 @@ public class ProductDAO implements Serializable {
                     + "AND p.status = :status "
                     + "ORDER BY p.createDate DESC");
             qr.setParameter("searchName", "%" + searchName + "%");
-            qr.setParameter("search", "%" + searchName + "%");
+            qr.setParameter("status", searchStatus);
             qr.setParameter("categoryId", Integer.parseInt(categoryId));
 
         }

@@ -23,9 +23,42 @@
                 <div class="section section-white section-search">
                     <div class="container">
                         <div class="row">
+                            <h4 class="text-center text-danger">${requestScope.MESSAGE}</h4>
                             <div class=" ml-auto">
-                                <a class="btn btn-success" href="">Create Category</a>
 
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+                                    Create Category
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="create-category" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <form action="CreateCategory" method="POST">
+
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Create new Category</h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h5>Category Name:</h5>
+                                                    <input class="input-group" type="text" name="txtName" />
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div class="left-side">
+                                                        <button type="button" class="btn btn-default btn-link" data-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                    <div class="divider"></div>
+                                                    <div class="right-side">
+                                                        <button type="submit" class="btn btn-danger btn-link">Create</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <br/>
@@ -45,23 +78,33 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
+                                        <c:forEach  items="${categoryList}" var="category" varStatus="counter">
+                                            <tr>
+                                        <form action="UpdateCategory" class="btn btn-sm btn-link" method="POST">
+                                            <td>${counter.count}</td>
                                             <td>
-
-                                                Develop
+                                                <input class="input form-control no-border " name="txtName" type="text" value="${category.name}">
                                             </td>
                                             <td class="td-actions text-right">
-                                                <button type="button" data-toggle="tooltip" data-placement="top" title=""
+
+                                                <input type="hidden" name="txtId" value="${category.id}" />
+                                                <button type="submit" data-toggle="tooltip" data-placement="top" title=""
                                                         data-original-title="Update Category" class="btn btn-success btn-link btn-sm">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
-                                                <button type="button" data-toggle="tooltip" data-placement="top" title=""
-                                                        data-original-title="Remove Category" class="btn btn-danger btn-link btn-sm">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </td>
+                                        </form>
+                                        <form action="DeleteCategory" class="btn btn-sm btn-link" method="POST">
+                                            <input type="hidden" name="txtId" value="${category.id}" />
+                                            <button type="submit" data-toggle="tooltip" data-placement="top" title=""
+                                                    data-original-title="Remove Category" class="btn btn-danger btn-link btn-sm">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </form>
+
+                                        </td>
                                         </tr>
+
+                                    </c:forEach>
 
                                     </tbody>
                                 </table>

@@ -25,7 +25,7 @@
                 <div class="section section-white section-search">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-11 col-12 ml-auto text-center">
+                            <div class="col-md-10 ml-auto text-center">
                                 <form action="AdminSearch" method="Post" class="d-block form-inline">
                                     <input name="txtAdminSearch" value="${sessionScope.ADMIN_SEARCH_NAME}" type="text" class="input-xtreme form-control no-border" placeholder="Search">
                                     <%
@@ -35,7 +35,7 @@
                                     %>
 
 
-                                    <select name="txtAdminCategory" class="selectpicker col-2 show-tick" data-style="btn-info">
+                                    <select name="txtAdminCategory" class="selectpicker col-md-3 show-tick" data-style="btn-info">
                                         <option class="select-option" value="0" 
                                                 <c:if test="${sessionScope.ADMIN_SEARCH_CATEGORY eq '0'}">selected</c:if> >All category
                                                 </option>
@@ -46,7 +46,7 @@
                                         </c:forEach>
                                     </select>
 
-                                    <select name="txtAdminStatus" class="selectpicker col-2 show-tick" data-style="btn-info">
+                                    <select name="txtAdminStatus" class="selectpicker col-3 show-tick" data-style="btn-info">
                                         <option class="select-option" value="All" 
                                                 <c:if test="${sessionScope.ADMIN_SEARCH_STATUS eq 'All'}">selected</c:if> >All status
                                                 </option>
@@ -65,7 +65,7 @@
                                                 class="nc-icon nc-zoom-split"></i></button>
                                     </form>
                                 </div>
-                                <div class="col-sm-1 ml-auto">
+                                <div class="col-md-2 mt-3">
                                 <c:url var="CreateFoodLink" value="create-food.jsp">
                                     <c:param name="txtAdminSearch" value="${sessionScope.ADMIN_SEARCH_NAME}"/>
                                     <c:param name="txtAdminCategory" value="${sessionScope.ADMIN_SEARCH_CATEGORY}"/>

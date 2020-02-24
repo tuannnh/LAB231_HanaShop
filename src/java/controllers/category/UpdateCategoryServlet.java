@@ -5,12 +5,16 @@
  */
 package controllers.category;
 
+import static controllers.category.CreateCategoryServlet.log;
+import daos.CategoryDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -18,29 +22,30 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class UpdateCategoryServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    static Logger log = Logger.getLogger(UpdateCategoryServlet.class);
+    private static final String URL = "admin-category.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UpdateCategoryServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UpdateCategoryServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+            String id = request.getParameter("txtId");
+            String name = request.getParameter("txtName");
+            CategoryDAO dao = new CategoryDAO();
+            boolean result = dao.updateCategory(Integer.parseInt(id), name);
+            if (!result) {
+                request.setAttribute("MESSAGE", "This category: " + name + " is existed!");
+                request.getRequestDispatcher(URL).forward(request, response);
+            }
+
+            //After make change of list, refresh
+            HttpSession session = request.getSession();
+            session.setAttribute("ADMIN_PRODUCTS", null);
+            session.setAttribute("USER_PRODUCTS", null);
+        } catch (Exception e) {
+            log.info("Error at Create Category Servlet: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            response.sendRedirect(URL);
         }
     }
 
