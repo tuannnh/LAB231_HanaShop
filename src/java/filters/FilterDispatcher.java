@@ -5,10 +5,13 @@
  */
 package filters;
 
+import entities.Account;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -16,6 +19,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 /**
@@ -91,9 +96,9 @@ public class FilterDispatcher implements Filter {
             throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
         String uri = httpRequest.getRequestURI();
         String url = HOME;
-
         try {
             int lastIndex = uri.lastIndexOf("/");
             String resource = uri.substring(lastIndex + 1);
@@ -105,7 +110,7 @@ public class FilterDispatcher implements Filter {
                     url = resource;
 
                 }
-                
+
                 if (resource.contains(".png") || resource.contains(".jpg")) {
                     url = resource;
                 }
@@ -117,6 +122,104 @@ public class FilterDispatcher implements Filter {
 
             if (uri.lastIndexOf("/assets") > 0) {
                 url = uri.substring(lastIndex + 1);
+            }
+
+            //Authorize
+            List<String> guestExceptions = new ArrayList<>();
+            guestExceptions.add("Logout");
+            guestExceptions.add("AddToCart");
+            guestExceptions.add("CompletePurchase");
+            guestExceptions.add("ReviewPurchase");
+            guestExceptions.add("SearchHistory");
+            guestExceptions.add("UpdateCart");
+            guestExceptions.add("AuthorizePaypal");
+            guestExceptions.add("AdminSearch");
+            guestExceptions.add("CreateFood");
+            guestExceptions.add("DeleteFood");
+            guestExceptions.add("ViewFood");
+            guestExceptions.add("UpdateFood");
+            guestExceptions.add("ViewFood");
+            guestExceptions.add("ChangePageAdmin");
+            guestExceptions.add("CreateCategory");
+            guestExceptions.add("UpdateCategory");
+            guestExceptions.add("DeleteCategory");
+            guestExceptions.add("admin-food.jsp");
+            guestExceptions.add("admin-category.jsp");
+            guestExceptions.add("create-food.jsp");
+            guestExceptions.add("view-food.jsp");
+            guestExceptions.add("review.jsp");
+            guestExceptions.add("receipt.jsp");
+            guestExceptions.add("history.jsp");
+            guestExceptions.add("cart.jsp");
+
+            List<String> userExceptions = new ArrayList<>();
+            userExceptions.add("Login");
+            userExceptions.add("Register");
+            userExceptions.add("AdminSearch");
+            userExceptions.add("CreateFood");
+            userExceptions.add("DeleteFood");
+            userExceptions.add("ViewFood");
+            userExceptions.add("UpdateFood");
+            userExceptions.add("ChangePageAdmin");
+            userExceptions.add("CreateCategory");
+            userExceptions.add("UpdateCategory");
+            userExceptions.add("DeleteCategory");
+            userExceptions.add("admin-food.jsp");
+            userExceptions.add("admin-category.jsp");
+            userExceptions.add("create-food.jsp");
+            userExceptions.add("register.jsp");
+            userExceptions.add("login.jsp");
+            userExceptions.add("view-food.jsp");
+
+            List<String> adminExceptions = new ArrayList<>();
+            adminExceptions.add("Login");
+            adminExceptions.add("Register");
+            adminExceptions.add("AddToCart");
+            adminExceptions.add("CompletePurchase");
+            adminExceptions.add("ReviewPurchase");
+            adminExceptions.add("SearchHistory");
+            adminExceptions.add("UpdateCart");
+            adminExceptions.add("AuthorizePaypal");
+            adminExceptions.add("ChangePage");
+            userExceptions.add("register.jsp");
+            userExceptions.add("login.jsp");
+            adminExceptions.add("cart.jsp");
+            adminExceptions.add("history.jsp");
+            adminExceptions.add("receipt.jsp");
+            adminExceptions.add("review.jsp");
+
+            HttpSession session = httpRequest.getSession();
+            Account account = (Account) session.getAttribute("USER");
+            String privilege = null;
+            if (account != null) {
+                privilege = account.getPrivilege();
+            }
+
+            if (resource.length() > 0) {
+                //NOT LOGGED IN
+                if (privilege == null) {
+
+                    for (String guestException : guestExceptions) {
+                        if (resource.contains(guestException)) {
+                            httpResponse.sendRedirect(LOGIN);
+                        }
+                    }
+
+                } else {// Logged in
+                    if (privilege.equals("Admin")) {
+                        for (String adminException : adminExceptions) {
+                            if (resource.contains(adminException)) {
+                                httpResponse.sendRedirect(HOME);
+                            }
+                        }
+                    } else if (privilege.equals("User")) {
+                        for (String userException : userExceptions) {
+                            if (resource.contains(userException)) {
+                                httpResponse.sendRedirect(HOME);
+                            }
+                        }
+                    }
+                }
             }
 
             if (url != null) {

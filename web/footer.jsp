@@ -17,6 +17,7 @@
 
 <!--   Core JS Files   -->
 <script src="assets/js/core/jquery.min.js" type="text/javascript"></script>
+<script src="assets/js/jquery-ui.min.js" type="text/javascript"></script>
 <script src="assets/js/core/popper.min.js" type="text/javascript"></script>
 <script src="assets/js/core/bootstrap.min.js" type="text/javascript"></script>
 <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
@@ -24,6 +25,8 @@
 <script src="assets/js/vertical-nav.js" type="text/javascript"></script>
 <!--	Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
 <script src="assets/js/plugins/bootstrap-selectpicker.js" type="text/javascript"></script>
+<script src="assets/js/plugins/moment.min.js" type="text/javascript"></script>
+<script src="assets/js/plugins/bootstrap-datetimepicker.js" type="text/javascript"></script>
 <!--  for Jasny fileupload -->
 <script src="assets/js/plugins/jasny-bootstrap.min.js"></script>
 <!-- Control Center for Paper Kit: parallax effects, scripts for the example pages etc -->
@@ -33,6 +36,7 @@
 <script src="assets/js/plugins/presentation-page/main.js"></script>
 <script src="assets/js/sweetalert2.min.js"></script>
 <script src="assets/js/myjs.js"></script>
+
 </body>
 
 </html>

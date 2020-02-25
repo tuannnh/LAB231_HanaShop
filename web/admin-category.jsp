@@ -42,7 +42,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <h5>Category Name:</h5>
-                                                    <input class="input-group" type="text" name="txtName" />
+                                                    <input class="input-group" type="text" name="txtName" required=""/>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <div class="left-side">

@@ -60,7 +60,7 @@
                             </li>
                         </c:if>
 
-               
+
 
                     </ul>
                 </div>
@@ -80,7 +80,7 @@
                                     <c:set var="baseURL" value="http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}"/>
 
                                     <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=${baseURL}/Register&response_type=code
-                                            &client_id=680564478805-icbg6sucel1ggngf9qt80qkg7jbsduf9.apps.googleusercontent.com&approval_prompt=force" class="btn btn-just-icon btn-google"><i class="fa fa-google"></i></a>
+                                       &client_id=680564478805-icbg6sucel1ggngf9qt80qkg7jbsduf9.apps.googleusercontent.com&approval_prompt=force" class="btn btn-just-icon btn-google"><i class="fa fa-google"></i></a>
 
                                 </div>
                                 <div class="division">
@@ -88,10 +88,17 @@
                                     <span>or</span>
                                     <div class="line r"></div>
                                 </div>
-                                <form action="Register" method="POST" class="register-form">
-                                    <input type="text" name="txtEmail" class="form-control" placeholder="Email">
-                                    <input type="password" name="txtPassword" class="form-control" placeholder="Password">
-                                    <input type="password" name="txtConfirm" class="form-control" placeholder="Password">
+                                <form action="Register" method="POST" class="register-form validate-form">
+                                    <div class="validate-input" data-validate = "Please enter email: mail@hungtuan.me">
+                                        <input id="email" type="text" name="txtEmail" class="my-input form-control" placeholder="Email">
+                                    </div>
+                                    <div class="validate-input" data-validate = "Please enter password from 6 - 24 chars">
+                                        <input id="password" type="password" name="txtPassword" class="form-control my-input" placeholder="Password">
+                                    </div>
+                                    <div class="validate-input" data-validate = "Confirm password not match">
+                                        <input id="confirm" type="password" name="txtConfirm" class="form-control my-input" placeholder="Confirm Password">
+                                    </div>
+
                                     <input type="submit" class="btn btn-block btn-round" value="Register"/>
                                 </form>
                                 <div class="login">
@@ -131,6 +138,6 @@
         <script src="assets/js/paper-kit.js?v=2.3.0" type="text/javascript"></script>
         <!--  Plugin for presentation page - isometric cards  -->
         <script src="assets/js/plugins/presentation-page/main.js"></script>
-         <script src="assets/js/myjs.js"></script>
+        <script src="assets/js/myjs.js"></script>
     </body>
 </html>

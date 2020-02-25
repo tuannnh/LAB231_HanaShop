@@ -24,7 +24,7 @@
                     <div class="container">
                         <h3>Add Product</h3>
 
-                        <form action="UpdateFoodServlet" method="POST" class="form-group" enctype="multipart/form-data">
+                        <form action="UpdateFoodServlet" method="POST" class="form-group validate-form" enctype="multipart/form-data">
                             <div>
                                 <div class="row">
                                     <div class="col-md-5 col-sm-5">
@@ -41,7 +41,7 @@
                                                     <span class="btn btn-outline-default btn-round btn-file">
                                                         <span class="fileinput-new">Select image</span>
                                                         <span class="fileinput-exists">Change</span>
-                                                        <input type="file" name="image">
+                                                        <input id="input-image" type="file" name="image" accept=".jpg,.jpeg,.png" onchange="validateFileType()">
                                                     </span>
                                                     <a href="#" class="btn btn-link btn-danger fileinput-exists" data-dismiss="fileinput"><i
                                                             class="fa fa-times"></i> Remove</a>
@@ -89,7 +89,9 @@
                                             <h6>Name
                                                 <span class="icon-danger">*</span>
                                             </h6>
-                                            <input type="text" class="form-control border-input" value="${requestScope.PRODUCT.name}" name="txtName" placeholder="enter the product name here...">
+                                            <div class="validate-input" data-validate = "Please enter valid name!">
+                                                <input type="text" class="my-input form-control border-input" value="${requestScope.PRODUCT.name}" name="txtName" placeholder="enter the product name here...">
+                                            </div>
                                         </div>
 
                                         <div class="row price-row">
@@ -97,8 +99,8 @@
                                                 <h6>Price
                                                     <span class="icon-danger">*</span>
                                                 </h6>
-                                                <div class="input-group border-input">
-                                                    <input name="txtPrice" type="text" value="${requestScope.PRODUCT.price}" placeholder="enter price" class="form-control border-input">
+                                                <div class="input-group border-input validate-input" data-validate = "Please enter valid price!">
+                                                    <input name="txtPrice" type="text" value="${requestScope.PRODUCT.price}" placeholder="enter price" class="my-input form-control border-input">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text"><i class="fa fa-usd"></i></span>
                                                     </div>
@@ -109,8 +111,8 @@
                                                 <h6>Quantity
                                                     <span class="icon-danger">*</span>
                                                 </h6>
-                                                <div class="input-group border-input">
-                                                    <input name="txtQuantity" type="text" value="${requestScope.PRODUCT.quantity}" placeholder="enter quantity" class="form-control border-input">
+                                                <div class="input-group border-input validate-input" data-validate = "Please enter valid quantity!">
+                                                    <input name="txtQuantity" type="text" value="${requestScope.PRODUCT.quantity}" placeholder="enter quantity" class="my-input form-control border-input">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text"></span>
                                                     </div>
@@ -122,10 +124,12 @@
                                             <h6>Description
                                                 <span class="icon-danger">*</span>
                                             </h6>
-                                            <textarea name="txtDescription" class="form-control textarea-limited" placeholder="Description about food" rows="13"
-                                                      maxlength="150">
-                                                ${requestScope.PRODUCT.description}
-                                            </textarea>
+                                            <div class="validate-input" data-validate = "Description cannot empty!">
+                                                <textarea name="txtDescription" class="my-input form-control textarea-limited" placeholder="Description about food" rows="13"
+                                                          maxlength="150">
+                                                    ${requestScope.PRODUCT.description}
+                                                </textarea>
+                                            </div>
                                             <h5>
                                                 <small>
                                                     <span id="textarea-limited-message" class="pull-right">150 characters left</span>

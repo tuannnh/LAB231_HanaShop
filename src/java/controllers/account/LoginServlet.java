@@ -61,7 +61,7 @@ public class LoginServlet extends HttpServlet {
                     } else {
                         url = USER;
                     }
-                }
+                } 
             }
             if (url.equals(ERROR)) {
                 request.setAttribute("ERROR_MESSAGE", "Email or Password is not correct!");

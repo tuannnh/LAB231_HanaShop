@@ -51,20 +51,19 @@ public class InvoiceDAO implements Serializable {
 
     public List<Invoice> searchHistoryByProductName(Account customer, String searchName, Date searchDateStart, Date searchDateEnd) throws Exception {
         EntityManager em = emf.createEntityManager();
-        System.out.println(searchName);
-        System.out.println(searchDateStart);
-        System.out.println(searchDateEnd);
         Query qr = em.createQuery("SELECT i FROM Invoice i "
                 + "WHERE i.customer = :customer "
                 + "AND i.createDate >= :searchDateStart AND i.createDate <= :searchDateEnd "
                 + "AND i IN "
                 + "(SELECT o.invoiceId FROM OrderItem o WHERE o.productId IN "
-                + "(SELECT p FROM Product p WHERE p.name LIKE :searchName))");
+                + "(SELECT p FROM Product p WHERE p.name LIKE :searchName)) "
+                + "ORDER BY i.createDate DESC");
         qr.setParameter("customer", customer);
         qr.setParameter("searchDateStart", searchDateStart);
         qr.setParameter("searchDateEnd", searchDateEnd);
         qr.setParameter("searchName", "%" + searchName + "%");
         List<Invoice> result = qr.getResultList();
+        em.close();
         return result;
     }
 

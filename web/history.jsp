@@ -23,11 +23,31 @@
                         <div class="row">
                             <div class="col-md-12 col-12 ml-auto  text-center">
                                 <form action="SearchHistory" method="POST" class="d-block form-inline">
-                                    <input class="input-xtreme form-control no-border" name="txtHistorySearchName" value="${sessionScope.HISTORY_SEARCH_NAME}" type="text" placeholder="Search">
-                                    <input class="input form-control " name="txtHistoryDateStart" type="text" value="${sessionScope.HISTORY_SEARCH_DATE_START}" placeholder="">
-                                    <input class="input form-control " name="txtHistoryDateEnd" type="text" value="${sessionScope.HISTORY_SEARCH_DATE_END}" placeholder="">
-                                    <button type="submit" class="btn btn-info btn-just-icon btn-round"><i
-                                            class="nc-icon nc-zoom-split"></i></button>
+                                    <div class="col-sm-4 ml-auto mr-auto">
+
+                                        <input class="form-control mr-auto" name="txtHistorySearchName" value="${sessionScope.HISTORY_SEARCH_NAME}" type="text" placeholder="Search">
+                                        <div class="input-group date form-inline" id="dateStart">
+                                            <input id="dateStartInput" type="text" name="txtHistoryDateStart" value="${sessionScope.HISTORY_SEARCH_DATE_START}" class="form-control datetimepicker date-input" onkeypress="return false;">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <span class="glyphicon glyphicon-calendar"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group date form-inline" id="dateEnd">
+                                            <input type="text" name="txtHistoryDateEnd" value="${sessionScope.HISTORY_SEARCH_DATE_END}" class="form-control datetimepicker date-input" onkeypress="return false;">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <span class="glyphicon glyphicon-calendar"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-info btn-just-icon btn-round"><i
+                                                class="nc-icon nc-zoom-split"></i></button>
+                                    </div>
+
+
                                 </form>
                             </div>
                         </div>

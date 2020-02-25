@@ -30,7 +30,6 @@
                     <div class="container">
                         <div class="row">
 
-
                             <div class="col-md-12 col-12 ml-auto mr-auto text-center">
                                 <%
                                     CategoryDAO cdao = new CategoryDAO();
@@ -38,17 +37,16 @@
                                     pageContext.setAttribute("categoryList", categories);
                                 %>
 
-                                <form action="SearchFood" method="POST" role="search" class="form-inline col-md-12 ml-auto mr-auto">
-                                    <div class="input-group no-border col-md-12 mr-auto">
-                                        <div class="col-md-2">
-
-                                            <span class=" addon-xtreme no-border" id="basic-addon1"><i
-                                                    class="fa fa-search"></i></span>
+                                <form action="SearchFood" method="POST" role="search" class="form-inline col-md-12 ml-auto mr-auto text-center">
+                                    <div class="input-group no-border col-md-10 mr-auto">
+                                        <div class="col-md-6">
+                                            <button type="submit" class="btn-link addon-xtreme no-border mb-3" id="basic-addon1"><i
+                                                    class="fa fa-search"></i></button>
                                             <input name="txtUserSearch" value="${sessionScope.USER_SEARCH_NAME}" type="text" class="form-control input-xtreme no-border" placeholder="Search here..." />
 
                                         </div>
-                                        <div class="col-md-6 mt-3">
-                                            <select name="txtUserCategory" class="selectpicker col-md-5 show-tick" data-style="btn-info">
+                                        <div class="col-md-3 mt-3">
+                                            <select name="txtUserCategory" class="selectpicker show-tick" data-style="btn-info">
                                                 <option class="select-option" value="0" 
                                                         <c:if test="${sessionScope.USER_SEARCH_CATEGORY eq '0'}">selected</c:if> >All category
                                                         </option>
@@ -60,19 +58,14 @@
                                             </select>
                                         </div>
                                     </div>
-
-                                    <div class="input-group col-md-8 mr-auto">
-
-
-                                        <label class="mr-2" for="lowest">From</label>
-                                        <input name="txtUserMin" value="${sessionScope.USER_SEARCH_MIN}" placeholder="1" id="lowest" type="text"
-                                               class="form-inline input-group-append w-25" /><label class="ml-2">USD -</label>
-                                        <label for="highest" class="ml-2 mr-2">To</label>
-                                        <input name="txtUserMax" value="${sessionScope.USER_SEARCH_MAX}" placeholder="5000" id="highest" type="text"
-                                               class="form-inline input-group-sm w-25" /><label class="ml-2">USD</label>
-
+                                    <div class="col-md-3">
+                                        <div id="my-slider" class="slider slider-primary noUi-target noUi-ltr noUi-horizontal noUi-background"></div>
                                     </div>
-                                    <input type="submit" hidden="true" />
+                                    <input id="priceMin" name="txtUserMin" value="${sessionScope.USER_SEARCH_MIN}" placeholder="1" id="lowest" type="text"
+                                           class="form-inline input-group-sm ml-4"/>
+                                    <label class="ml-3 mr-3">-</label>
+                                    <input id="priceMax" name="txtUserMax" value="${sessionScope.USER_SEARCH_MAX}" placeholder="5000" id="highest" type="text"
+                                           class="form-inline input-group-sm"/>
                                 </form>
                             </div>
                         </div>

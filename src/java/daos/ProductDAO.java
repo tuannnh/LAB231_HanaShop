@@ -5,7 +5,6 @@
  */
 package daos;
 
-import entities.Invoice;
 import entities.Product;
 import java.io.Serializable;
 import java.util.List;

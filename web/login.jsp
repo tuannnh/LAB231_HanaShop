@@ -90,9 +90,13 @@
                                     <span>or</span>
                                     <div class="line r"></div>
                                 </div>
-                                <form action="Login" method="POST" class="register-form">
-                                    <input type="text" name="txtEmail" class="form-control" placeholder="Email">
-                                    <input type="password" name="txtPassword" class="form-control" placeholder="Password">
+                                <form action="Login" method="POST" class="register-form validate-form">
+                                    <div class="validate-input" data-validate = "Please enter email: mail@hungtuan.me">
+                                        <input id="email" type="text" name="txtEmail" class="my-input form-control " placeholder="Email">
+                                    </div>
+                                    <div class="validate-input" data-validate = "Please enter password from 6 - 24 chars">
+                                        <input id="password" type="password" name="txtPassword" class="my-input form-control" placeholder="Password">
+                                    </div>
                                     <input type="submit" class="btn btn-block btn-round" value="Login"/>
                                 </form>
                                 <div class="login">

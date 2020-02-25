@@ -10,6 +10,7 @@ import entities.Account;
 import entities.Invoice;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -35,7 +36,6 @@ public class SearchHistoryServlet extends HttpServlet {
             String searchDateStart = request.getParameter("txtHistoryDateStart");
             String searchDateEnd = request.getParameter("txtHistoryDateEnd");
             Account customer = (Account) session.getAttribute("USER");
-            String email = customer.getEmail();
             InvoiceDAO dao = new InvoiceDAO();
             System.out.println(searchDateStart);
             System.out.println(searchDateEnd);
@@ -43,6 +43,13 @@ public class SearchHistoryServlet extends HttpServlet {
 
             Date start = sdf.parse(searchDateStart);
             Date end = sdf.parse(searchDateEnd);
+            Calendar c = Calendar.getInstance();
+            c.setTime(end);
+            c.set(Calendar.HOUR_OF_DAY, 23);
+            c.set(Calendar.MINUTE, 59);
+            c.set(Calendar.SECOND, 59);
+            c.set(Calendar.MILLISECOND, 999);
+            end = c.getTime();
             System.out.println(start);
             System.out.println(end);
             List<Invoice> products = dao.searchHistoryByProductName(customer, searchName, start, end);

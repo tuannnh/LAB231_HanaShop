@@ -188,9 +188,12 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
-    public Date getModifiedDate() {
-        return modifiedDate;
+    public String getModifiedDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(modifiedDate);
     }
+    
+   
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
