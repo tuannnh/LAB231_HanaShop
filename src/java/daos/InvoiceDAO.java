@@ -7,6 +7,8 @@ package daos;
 
 import entities.Account;
 import entities.Invoice;
+import entities.OrderItem;
+import entities.Product;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +28,12 @@ public class InvoiceDAO implements Serializable {
 
     public Invoice createNormalInvoice(Cart cart) throws Exception {
         EntityManager em = emf.createEntityManager();
-        Invoice newInvoice = new Invoice(new Date(), Float.parseFloat(cart.getTotal()), cart.getCustomer());
+        Invoice newInvoice;
+        if (cart.getCoupon() != null) {
+            newInvoice = new Invoice(new Date(), Double.parseDouble(cart.getTotal()), cart.getCustomer(), cart.getCoupon());
+        } else {
+            newInvoice = new Invoice(new Date(), Double.parseDouble(cart.getTotal()), cart.getCustomer());
+        }
         em.getTransaction().begin();
         em.persist(newInvoice);
         em.getTransaction().commit();
@@ -36,7 +43,12 @@ public class InvoiceDAO implements Serializable {
 
     public Invoice createPaypalInvoice(Cart cart, String paypalId) throws Exception {
         EntityManager em = emf.createEntityManager();
-        Invoice newInvoice = new Invoice(new Date(), Float.parseFloat(cart.getTotal()), cart.getCustomer(), paypalId);
+        Invoice newInvoice;
+        if (cart.getCoupon() != null) {
+            newInvoice = new Invoice(new Date(), Double.parseDouble(cart.getTotal()), cart.getCustomer(), paypalId, cart.getCoupon());
+        } else {
+            newInvoice = new Invoice(new Date(), Double.parseDouble(cart.getTotal()), cart.getCustomer(), paypalId);
+        }
         em.getTransaction().begin();
         em.persist(newInvoice);
         em.getTransaction().commit();
@@ -55,7 +67,7 @@ public class InvoiceDAO implements Serializable {
                 + "WHERE i.customer = :customer "
                 + "AND i.createDate >= :searchDateStart AND i.createDate <= :searchDateEnd "
                 + "AND i IN "
-                + "(SELECT o.invoiceId FROM OrderItem o WHERE o.productId IN "
+                + "(SELECT o.invoice FROM OrderItem o WHERE o.product IN "
                 + "(SELECT p FROM Product p WHERE p.name LIKE :searchName)) "
                 + "ORDER BY i.createDate DESC");
         qr.setParameter("customer", customer);
@@ -65,6 +77,16 @@ public class InvoiceDAO implements Serializable {
         List<Invoice> result = qr.getResultList();
         em.close();
         return result;
+    }
+    
+    public void addRating(int invoiceId, double rating) throws Exception{
+           EntityManager em = emf.createEntityManager();
+           Invoice rateInvoice = em.find(Invoice.class, invoiceId);
+           rateInvoice.setRating(rating);
+           em.getTransaction().begin();
+           em.merge(rateInvoice);
+           em.getTransaction().commit();
+           em.close();
     }
 
 }

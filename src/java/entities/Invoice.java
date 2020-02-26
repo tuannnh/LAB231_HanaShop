@@ -37,10 +37,19 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i"),
     @NamedQuery(name = "Invoice.findById", query = "SELECT i FROM Invoice i WHERE i.id = :id"),
+    @NamedQuery(name = "Invoice.findByPaypalId", query = "SELECT i FROM Invoice i WHERE i.paypalId = :paypalId"),
     @NamedQuery(name = "Invoice.findByCreateDate", query = "SELECT i FROM Invoice i WHERE i.createDate = :createDate"),
-    @NamedQuery(name = "Invoice.findByTotal", query = "SELECT i FROM Invoice i WHERE i.total = :total"),
-    @NamedQuery(name = "Invoice.findByPaypalId", query = "SELECT i FROM Invoice i WHERE i.paypalId = :paypalId")})
+    @NamedQuery(name = "Invoice.findByTotal", query = "SELECT i FROM Invoice i WHERE i.total = :total")})
 public class Invoice implements Serializable {
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "rating", precision = 53)
+    private Double rating;
+
+    @JoinColumn(name = "coupon", referencedColumnName = "coupon")
+    @ManyToOne
+    private Coupon coupon;
+    @Column(name = "paypalId", length = 255)
+    private String paypalId;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,20 +57,23 @@ public class Invoice implements Serializable {
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
     private Integer id;
+
     @Basic(optional = false)
     @Column(name = "createDate", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
     @Basic(optional = false)
     @Column(name = "total", nullable = false)
-    private float total;
-    @Column(name = "paypalId", length = 255)
-    private String paypalId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "invoiceId")
+    private double total;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "invoice")
     private List<OrderItem> orderItemList;
     @JoinColumn(name = "customer", referencedColumnName = "email", nullable = false)
     @ManyToOne(optional = false)
     private Account customer;
+
+    public void addOrderItem(OrderItem newOrderItem) {
+        this.orderItemList.add(newOrderItem);
+    }
 
     public Invoice() {
     }
@@ -70,23 +82,39 @@ public class Invoice implements Serializable {
         this.id = id;
     }
 
-    public Invoice(Integer id, Date createDate, float total) {
+    public Invoice(Integer id, String paypalId, Date createDate, double total) {
         this.id = id;
+        this.paypalId = paypalId;
         this.createDate = createDate;
         this.total = total;
     }
 
-    public Invoice(Date createDate, float total, Account customer) {
+    public Invoice(Date createDate, double total, Account customer) {
         this.createDate = createDate;
         this.total = total;
         this.customer = customer;
     }
 
-    public Invoice(Date createDate, float total, Account customer, String paypalId) {
+    public Invoice(Date createDate, double total, Account customer, Coupon coupon) {
+        this.createDate = createDate;
+        this.total = total;
+        this.customer = customer;
+        this.coupon = coupon;
+    }
+
+    public Invoice(Date createDate, double total, Account customer, String paypalId) {
         this.createDate = createDate;
         this.total = total;
         this.customer = customer;
         this.paypalId = paypalId;
+    }
+
+    public Invoice(Date createDate, double total, Account customer, String paypalId, Coupon coupon) {
+        this.createDate = createDate;
+        this.total = total;
+        this.customer = customer;
+        this.paypalId = paypalId;
+        this.coupon = coupon;
     }
 
     public Integer getId() {
@@ -95,6 +123,14 @@ public class Invoice implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getPaypalId() {
+        return paypalId;
+    }
+
+    public void setPaypalId(String paypalId) {
+        this.paypalId = paypalId;
     }
 
     public Date getCreateDate() {
@@ -110,20 +146,12 @@ public class Invoice implements Serializable {
         this.createDate = createDate;
     }
 
-    public float getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(float total) {
+    public void setTotal(double total) {
         this.total = total;
-    }
-
-    public String getPaypalId() {
-        return paypalId;
-    }
-
-    public void setPaypalId(String paypalId) {
-        this.paypalId = paypalId;
     }
 
     @XmlTransient
@@ -166,6 +194,22 @@ public class Invoice implements Serializable {
     @Override
     public String toString() {
         return "entities.Invoice[ id=" + id + " ]";
+    }
+
+    public Coupon getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(Coupon coupon) {
+        this.coupon = coupon;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
 }

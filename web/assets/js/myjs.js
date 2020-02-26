@@ -170,6 +170,17 @@ $(function () {
                 return false;
             }
         }
+        
+          if ($(input).attr('name') == 'txtDiscount') {
+            if ($(input).val().trim().match(/^-?\d*[.,]?\d{0,2}$/) == null) {
+                return false;
+            }
+        }
+        else {
+            if ($(input).val().trim() == '') {
+                return false;
+            }
+        }
 
         if ($(input).attr('name') == 'txtQuantity') {
             if ($(input).val().trim().match(/^\d+$/) == null) {
@@ -301,3 +312,4 @@ priceMax.addEventListener('change', function () {
     }
     mySlider.noUiSlider.set([null, this.value]);
 });
+

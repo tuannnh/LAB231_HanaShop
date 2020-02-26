@@ -7,6 +7,7 @@ package models;
 
 import daos.ProductDAO;
 import entities.Account;
+import entities.Coupon;
 import entities.Product;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Cart implements Serializable {
 
     private Account customer;
     private List<Product> purchasedItems;
+    private Coupon coupon;
 
     public Account getCustomer() {
         return customer;
@@ -36,6 +38,14 @@ public class Cart implements Serializable {
 
     public void setPurchasedItems(List<Product> purchasedItems) {
         this.purchasedItems = purchasedItems;
+    }
+
+    public Coupon getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(Coupon coupon) {
+        this.coupon = coupon;
     }
 
     public Cart() {
@@ -73,11 +83,31 @@ public class Cart implements Serializable {
     }
 
     public String getTotal() throws Exception {
-        float result = 0;
+        double result = 0;
+        for (Product item : purchasedItems) {
+            result += item.getPrice() * item.getQuantity();
+        }
+        if (coupon != null) {
+            result -= result * coupon.getDiscount();
+        }
+        System.out.println(result);
+        return String.format("%.1f", result);
+    }
+
+    public String getTotalBeforeDiscount() throws Exception {
+        double result = 0;
         for (Product item : purchasedItems) {
             result += item.getPrice() * item.getQuantity();
         }
         return String.format("%.1f", result);
+    }
+
+    public String getDiscount() throws Exception {
+        double result = 0;
+        for (Product item : purchasedItems) {
+            result += item.getPrice() * item.getQuantity();
+        }
+        return String.format("%.1f", result * coupon.getDiscount());
     }
 
     public void updateCart(int id, int quantity) throws Exception {

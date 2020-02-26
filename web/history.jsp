@@ -54,11 +54,19 @@
 
                         <c:forEach items="${sessionScope.HISTORY_LIST}" var="invoice">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <h4 class="title">Order ID: <strong>${invoice.id}</strong>  - Purchase Date: <strong>${invoice.purchaseDate}</strong> </h4>
+                                <div class="col-md-12 form-inline">
+                                    <form method="POST" action="Rating">
+                                        <h4 class="title">Invoice ID: <strong>${invoice.id}</strong>  - Purchase Date: <strong>${invoice.purchaseDate}</strong> 
+                                            - Rating: 
+                                            <input type="hidden" name="txtId" value="${invoice.id}"/>
+                                            <input type="hidden" name="txtRating" class="rating my-rating" data-filled="fa fa-star fa-2x custom-star" 
+                                                   data-empty="fa fa-star-o fa-2x" data-fractions="2" data-step="2" data-stop="10" value=${invoice.rating}/>
+
+                                        </h4>
+                                    </form>
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table table-striped">
+                                    <table class="table">
                                         <thead>
                                             <tr>
                                                 <th class="text-center"></th>
@@ -73,30 +81,36 @@
                                                 <tr>
                                                     <td class="text-center">
                                                         <div class="img-container" style="max-width: 50px; max-height: 50px;">
-                                                            <img src="${item.productId.imageURL}" alt="...">
+                                                            <img src="${item.product.imageURL}" alt="...">
                                                         </div>
                                                     </td>
 
-                                                    <td>${item.productId.name}</td>
+                                                    <td class="text-left ">${item.product.name}</td>
                                                     <td class="text-center">${item.quantity}</td>
                                                     <td class="text-center">$ ${item.stringPrice}</td>
                                                     <td class="text-center">$ ${item.subTotal}</td>
                                                 </tr>
                                             </c:forEach>
-                                            <tr>
-                                                <td colspan="2"></td>
-                                                <td></td>
-                                                <td class="td-total text-right">
-                                                    Total:
-                                                </td>
-                                                <td class="td-total text-center">
-                                                    <small>$ </small>${invoice.total}
-                                                </td>
-                                            </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
+                            <hr/>
+                            <div class="container col-md-12 form-inline">
+                                <div class="col-10 text-right ml-auto">
+                                    <p>Coupon:</p>
+                                    <p> Discount:</p>
+                                    <h5 class="td-total"><strong>Total:</strong></h5>
+                                </div>
+
+                                <div class="col-2 text-left ml-auto">
+                                    <p> ${invoice.coupon.coupon}‎‎‏‏‎ ‎</p>
+                                    <p> ${invoice.coupon.discount*invoice.total}</p>
+                                    <h5 class="td-total"><strong><small>$ </small>${invoice.total}</strong></h5>
+                                </div>
+                            </div>
+
                         </c:forEach>
 
 
@@ -108,5 +122,12 @@
         </div>
 
         <%@include file="footer.jsp" %>
+        <script>
+
+            $(".my-rating").on('change', function () {
+                $(this).closest("form").submit();
+            });
+
+        </script>
     </body>
 </html>

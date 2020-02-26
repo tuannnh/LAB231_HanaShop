@@ -31,12 +31,12 @@
                                         <div class="container text-center"> 
                                             <h6>Product Image</h6>
                                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
-                                                <div class="fileinput-new thumbnail img-no-padding text-center" style="max-width: 100px; max-height: 100px;">
+                                                <div class="fileinput-new thumbnail img-no-padding text-center" style="max-width: 300px; max-height: 300px;">
                                                     <img src="${requestScope.PRODUCT.imageURL}" alt="...">
                                                     <input type="hidden" name="txtImageURL" value="${requestScope.PRODUCT.imageURL}" />
                                                 </div>
                                                 <div class="fileinput-preview fileinput-exists thumbnail img-no-padding"
-                                                     style="max-width: 100px; max-height: 100px;"></div>
+                                                     style="max-width: 300px; max-height: 300px;"></div>
                                                 <div>
                                                     <span class="btn btn-outline-default btn-round btn-file">
                                                         <span class="fileinput-new">Select image</span>
@@ -60,17 +60,17 @@
                                         %>
                                         <select name="txtCategory" class="selectpicker col-md-5 show-tick" data-style="btn-info">
                                             <c:forEach items="${categoryList}" var="category">
-                                                <option class="select-option" value="${category.id}"  <c:if test="${requestScope.PRODUCT.categoryId.id eq category.id}">selected</c:if>>${category}</option>
+                                                <option class="select-option" value="${category.id}"  <c:if test="${requestScope.PRODUCT.category.id eq category.id}">selected</c:if>>${category}</option>
                                             </c:forEach>
                                         </select>
                                         <hr/>
                                         <strong>Status</strong>
                                         <select name="txtStatus" class="selectpicker col-md-6 show-tick" data-style="btn-info">
                                             <option class="select-option" value="Inactive" 
-                                                    <c:if test="${requestScope.PRODUCT.status eq 'Inactive'}">selected</c:if> >Inactive
+                                                    <c:if test="${requestScope.PRODUCT.status.statusName eq 'Inactive'}">selected</c:if> >Inactive
                                                     </option>
-                                                    <option class="select-option" value="Active" 
-                                                    <c:if test="${requestScope.PRODUCT.status eq 'Active'}">selected</c:if> >Active
+                                                    <option class="select-option" value="Active"
+                                                    <c:if test="${requestScope.PRODUCT.status.statusName eq 'Active'}">selected</c:if> >Active
                                                     </option>
 
                                             </select>

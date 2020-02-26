@@ -27,11 +27,11 @@
                                         <div class="container text-center"> 
                                             <h6>Product Image</h6>
                                             <div class="fileinput fileinput-new text-center" data-provides="fileinput" >
-                                                <div class="fileinput-new thumbnail img-no-padding" style="max-width: 370px; max-height: 250px;">
+                                                <div class="fileinput-new thumbnail img-no-padding" style="max-width: 300px; max-height: 300px;">
                                                     <img src="assets/img/image_placeholder.jpg" alt="...">
                                                 </div>
                                                 <div class="fileinput-preview fileinput-exists thumbnail img-no-padding"
-                                                     style="max-width: 100px; max-height: 100px;"></div>
+                                                     style="max-width: 300px; max-height: 300px;"></div>
                                                 <div class="validate-input" data-validate = "Image must be update!">
                                                     <span class="btn btn-outline-default btn-round btn-file">
                                                         <span class="fileinput-new">Select image</span>

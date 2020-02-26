@@ -6,9 +6,8 @@
 package daos;
 
 import entities.Account;
+import entities.Privilege;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -18,7 +17,7 @@ import javax.persistence.Query;
  *
  * @author tuannnh
  */
-public class AccountDAO implements Serializable{
+public class AccountDAO implements Serializable {
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("Lab231_HanaShopPU");
 
@@ -33,12 +32,15 @@ public class AccountDAO implements Serializable{
         if (qr.getResultList().size() > 0) {
             user = ((Account) qr.getSingleResult());
         }
+        em.close();
         return user;
     }
 
     public Account findByEmail(String email) throws Exception {
         EntityManager em = emf.createEntityManager();
-        return em.find(Account.class, email);
+        Account result = em.find(Account.class, email);
+        em.close();
+        return result;
 
     }
 
@@ -48,11 +50,13 @@ public class AccountDAO implements Serializable{
         if (user != null) {
             return false;
         }
-
-        user = new Account(email, password, "User");
+        PrivilegeDAO dao = new PrivilegeDAO();
+        Privilege privilege = dao.getPrivilege("User");
+        user = new Account(email, password, privilege);
         em.getTransaction().begin();
         em.persist(user);
         em.getTransaction().commit();
+        em.close();
         return true;
 
     }
@@ -64,10 +68,13 @@ public class AccountDAO implements Serializable{
             return false;
         }
 
-        user = new Account(email, "User");
+        PrivilegeDAO dao = new PrivilegeDAO();
+        Privilege privilege = dao.getPrivilege("User");
+        user = new Account(email, privilege);
         em.getTransaction().begin();
         em.persist(user);
         em.getTransaction().commit();
+        em.close();
         return true;
 
     }

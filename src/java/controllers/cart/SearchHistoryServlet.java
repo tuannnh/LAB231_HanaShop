@@ -37,12 +37,30 @@ public class SearchHistoryServlet extends HttpServlet {
             String searchDateEnd = request.getParameter("txtHistoryDateEnd");
             Account customer = (Account) session.getAttribute("USER");
             InvoiceDAO dao = new InvoiceDAO();
-            System.out.println(searchDateStart);
-            System.out.println(searchDateEnd);
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date start;
+            Date end;
+            if (searchName == null) {
+                searchName = (String) session.getAttribute("HISTORY_SEARCH_NAME");
+            }
+            if (searchDateStart == null && session.getAttribute("HISTORY_SEARCH_DATE_START") == null) {
+                start = new Date();
+            } else if (searchDateStart != null) {
+                start = sdf.parse(searchDateStart);
 
-            Date start = sdf.parse(searchDateStart);
-            Date end = sdf.parse(searchDateEnd);
+            } else {
+                searchDateStart = (String) session.getAttribute("HISTORY_SEARCH_DATE_START");
+                start = sdf.parse(searchDateStart);
+            }
+            if (searchDateEnd == null) {
+                end = new Date();
+            } else if (searchDateEnd != null) {
+                end = sdf.parse(searchDateEnd);
+            } else {
+                searchDateEnd = (String) session.getAttribute("HISTORY_SEARCH_DATE_END");
+                end = sdf.parse(searchDateEnd);
+            }
+
             Calendar c = Calendar.getInstance();
             c.setTime(end);
             c.set(Calendar.HOUR_OF_DAY, 23);
@@ -50,8 +68,6 @@ public class SearchHistoryServlet extends HttpServlet {
             c.set(Calendar.SECOND, 59);
             c.set(Calendar.MILLISECOND, 999);
             end = c.getTime();
-            System.out.println(start);
-            System.out.println(end);
             List<Invoice> products = dao.searchHistoryByProductName(customer, searchName, start, end);
 
             session.setAttribute("HISTORY_LIST", products);

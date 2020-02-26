@@ -2,10 +2,15 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="Lab231_HanaShopPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>entities.Product</class>
     <class>entities.Invoice</class>
     <class>entities.OrderItem</class>
+    <class>entities.Category</class>
     <class>entities.SuggestProduct</class>
+    <class>entities.Product</class>
+    <class>entities.Account</class>
+    <class>entities.Coupon</class>
+    <class>entities.Status</class>
+    <class>entities.Privilege</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=ShopDB"/>

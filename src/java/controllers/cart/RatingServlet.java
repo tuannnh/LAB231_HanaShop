@@ -3,25 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers.paypal;
+package controllers.cart;
 
+import daos.InvoiceDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import models.Cart;
 import org.apache.log4j.Logger;
-import paypal.PaypalServices;
 
 /**
  *
  * @author tuannnh
  */
-public class AuthorizePaypalServlet extends HttpServlet {
+public class RatingServlet extends HttpServlet {
 
-    static Logger log = Logger.getLogger(AuthorizePaypalServlet.class);
+    static Logger log = Logger.getLogger(RatingServlet.class);
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,26 +33,24 @@ public class AuthorizePaypalServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "cart.jsp";
+        String url = "SearchHistoryServlet";
         try {
-
-            HttpSession session = request.getSession();
-            Cart cart = (Cart) session.getAttribute("CART");
-            if (cart.isAvailableCart()) {
-                PaypalServices paypalServices = new PaypalServices();
-                String approvalLink = paypalServices.authorizePayment(cart);
-                url = approvalLink;
-
-            } else {
-                session.setAttribute("CART", cart);
+            String rating = request.getParameter("txtRating");
+            String invoiceId = request.getParameter("txtId");
+            String callPage = request.getParameter("txtCallPage");
+            InvoiceDAO dao = new InvoiceDAO();
+            dao.addRating(Integer.parseInt(invoiceId), Double.parseDouble(rating));
+            if (callPage != null) {
+                request.setAttribute("RATING", rating);
+                request.getRequestDispatcher(callPage).forward(request, response);
+                url = "recipt.jsp";
             }
         } catch (Exception e) {
-            log.info("Error at Authorize Paypal Servlet: " + e.getMessage());
+            log.info("Error at Rating Servlet: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            response.sendRedirect(url);
+            request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -180,9 +180,8 @@ public class FilterDispatcher implements Filter {
             adminExceptions.add("SearchHistory");
             adminExceptions.add("UpdateCart");
             adminExceptions.add("AuthorizePaypal");
-            adminExceptions.add("ChangePage");
-            userExceptions.add("register.jsp");
-            userExceptions.add("login.jsp");
+            adminExceptions.add("register.jsp");
+            adminExceptions.add("login.jsp");
             adminExceptions.add("cart.jsp");
             adminExceptions.add("history.jsp");
             adminExceptions.add("receipt.jsp");
@@ -192,7 +191,7 @@ public class FilterDispatcher implements Filter {
             Account account = (Account) session.getAttribute("USER");
             String privilege = null;
             if (account != null) {
-                privilege = account.getPrivilege();
+                privilege = account.getPrivilege().getPrivilegeName();
             }
 
             if (resource.length() > 0) {
@@ -201,6 +200,7 @@ public class FilterDispatcher implements Filter {
 
                     for (String guestException : guestExceptions) {
                         if (resource.contains(guestException)) {
+                            url = null;
                             httpResponse.sendRedirect(LOGIN);
                         }
                     }
@@ -209,12 +209,14 @@ public class FilterDispatcher implements Filter {
                     if (privilege.equals("Admin")) {
                         for (String adminException : adminExceptions) {
                             if (resource.contains(adminException)) {
+                                url = null;
                                 httpResponse.sendRedirect(HOME);
                             }
                         }
                     } else if (privilege.equals("User")) {
                         for (String userException : userExceptions) {
                             if (resource.contains(userException)) {
+                                url = null;
                                 httpResponse.sendRedirect(HOME);
                             }
                         }

@@ -81,9 +81,10 @@
                             <c:if test="${requestScope.PAGE eq null}">
                                 <c:set var="PAGE" value="1" scope="request"/>
                             </c:if>
-                            <c:set var="TOTAL_PAGE" value="${Math.ceil(sessionScope.USER_PRODUCTS.size()/20)}" scope="request"/>
+                            <c:set var="OFFSET" value="4" scope="request"/>
+                            <c:set var="TOTAL_PAGE" value="${Math.ceil(sessionScope.USER_PRODUCTS.size()/OFFSET)}" scope="request"/>
                             <c:set var="USER_SEARCH_LIST" value="${requestScope.USER_PRODUCTS}" scope="session"/>
-                            <c:forEach items="${sessionScope.USER_PRODUCTS}" var="product" begin="${(requestScope.PAGE - 1)*20}" end="${(requestScope.PAGE - 1)*20 + 19}">
+                            <c:forEach items="${sessionScope.USER_PRODUCTS}" var="product" begin="${(requestScope.PAGE - 1)*OFFSET}" end="${(requestScope.PAGE - 1)*OFFSET + (OFFSET -1)}">
 
                                 <div class="col-md-3 col-sm-4">
                                     <div class="card card-product card-plain">
@@ -98,7 +99,7 @@
                                                 <hr>
                                                 <h6>${product.createDate}</h6>
                                                 <h6>Category:
-                                                    <span class="badge badge-pill badge-default">${product.categoryId}</span>
+                                                    <span class="badge badge-pill badge-default">${product.category}</span>
                                                 </h6>
                                                 <h6>Quantity: <span class="badge badge-pill badge-info">${product.quantity}</span></h6>
                                                 <hr>
@@ -190,7 +191,7 @@
                                                     <p>${product.description}</p>
                                                     <span>${product.createDate}</span>
                                                     <h6>Category:
-                                                        <span class="badge badge-pill badge-default">${product.categoryId}</span>
+                                                        <span class="badge badge-pill badge-default">${product.category}</span>
                                                     </h6>
                                                     <p>Quantity: <span class="badge badge-pill badge-info">${product.quantity}</span></p>
                                                     <div class="row justify-content-center">

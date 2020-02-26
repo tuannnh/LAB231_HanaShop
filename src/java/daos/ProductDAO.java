@@ -6,6 +6,7 @@
 package daos;
 
 import entities.Product;
+import entities.Status;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -81,7 +82,7 @@ public class ProductDAO implements Serializable {
     public boolean isAvailable(int id, int quantity) throws Exception {
         boolean result = false;
         EntityManager em = emf.createEntityManager();
-        Query qr = em.createQuery("SELECT p FROM Product p WHERE p.id = :id AND p.status = 'Active' AND p.quantity >= :quantity");
+        Query qr = em.createQuery("SELECT p FROM Product p WHERE p.id = :id AND p.status.statusName = 'Active' AND p.quantity >= :quantity");
 
         if (qr.setParameter("id", id).setParameter("quantity", quantity).getResultList().size() > 0) {
             result = true;
@@ -89,28 +90,28 @@ public class ProductDAO implements Serializable {
         return result;
     }
 
-    public List<Product> searchByAdmin(String searchName, String searchStatus, String categoryId) throws Exception {
+    public List<Product> searchByAdmin(String searchName, String searchStatus, String category) throws Exception {
         EntityManager em = emf.createEntityManager();
         Query qr;
-        if (categoryId.equals("0") && !searchStatus.equals("All")) {
+        if (category.equals("0") && !searchStatus.equals("All")) {
             qr = em.createQuery("SELECT p FROM Product p "
                     + "WHERE p.name "
                     + "LIKE :searchName "
-                    + "AND p.status = :status "
+                    + "AND p.status.statusName = :status "
                     + "ORDER BY p.createDate DESC");
 
             qr.setParameter("searchName", "%" + searchName + "%");
             qr.setParameter("status", searchStatus);
-        } else if (!categoryId.equals("0") && searchStatus.equals("All")) {
+        } else if (!category.equals("0") && searchStatus.equals("All")) {
             qr = em.createQuery("SELECT p FROM Product p "
                     + "WHERE p.name "
                     + "LIKE :searchName "
-                    + "AND p.categoryId.id = :categoryId "
+                    + "AND p.category.id = :category "
                     + "ORDER BY p.createDate DESC");
 
             qr.setParameter("searchName", "%" + searchName + "%");
-            qr.setParameter("categoryId", Integer.parseInt(categoryId));
-        } else if (categoryId.equals("0") && searchStatus.equals("All")) {
+            qr.setParameter("category", Integer.parseInt(category));
+        } else if (category.equals("0") && searchStatus.equals("All")) {
             qr = em.createQuery("SELECT p FROM Product p "
                     + "WHERE p.name "
                     + "LIKE :searchName "
@@ -120,12 +121,12 @@ public class ProductDAO implements Serializable {
         } else {
             qr = em.createQuery("SELECT P FROM Product p WHERE p.name "
                     + "LIKE :searchName "
-                    + "AND p.categoryId.id = :categoryId "
-                    + "AND p.status = :status "
+                    + "AND p.category.id = :category "
+                    + "AND p.status.statusName = :status "
                     + "ORDER BY p.createDate DESC");
             qr.setParameter("searchName", "%" + searchName + "%");
             qr.setParameter("status", searchStatus);
-            qr.setParameter("categoryId", Integer.parseInt(categoryId));
+            qr.setParameter("category", Integer.parseInt(category));
 
         }
         List<Product> products = qr.getResultList();
@@ -133,7 +134,7 @@ public class ProductDAO implements Serializable {
         return products;
     }
 
-    public List<Product> searchByUser(String searchName, String searchMin, String searchMax, String categoryId) throws Exception {
+    public List<Product> searchByUser(String searchName, String searchMin, String searchMax, String category) throws Exception {
         EntityManager em = emf.createEntityManager();
         Query qr = null;
         if (searchMin.equals("")) {
@@ -142,13 +143,13 @@ public class ProductDAO implements Serializable {
         if (searchMax.equals("")) {
             searchMax = "5000";
         }
-        if (categoryId.equals("0")) {
+        if (category.equals("0")) {
             qr = em.createQuery("SELECT p FROM Product p "
                     + "WHERE p.name "
                     + "LIKE :searchName "
                     + "AND p.price >= :searchMin "
                     + "AND p.price <= :searchMax "
-                    + "AND p.status = 'Active' "
+                    + "AND p.status.statusName = 'Active' "
                     + "AND p.quantity > 0 "
                     + "ORDER BY p.createDate DESC");
             qr.setParameter("searchName", "%" + searchName + "%");
@@ -159,14 +160,14 @@ public class ProductDAO implements Serializable {
                     + "LIKE :searchName "
                     + "AND p.price >= :searchMin "
                     + "AND p.price <= :searchMax "
-                    + "AND p.categoryId.id = :categoryId "
-                    + "AND p.status = 'Active' "
+                    + "AND p.category.id = :category "
+                    + "AND p.status.statusName = 'Active' "
                     + "AND p.quantity > 0 "
                     + "ORDER BY p.createDate DESC");
             qr.setParameter("searchName", "%" + searchName + "%");
             qr.setParameter("searchMin", Float.parseFloat(searchMin));
             qr.setParameter("searchMax", Float.parseFloat(searchMax));
-            qr.setParameter("categoryId", Integer.parseInt(categoryId));
+            qr.setParameter("category", Integer.parseInt(category));
 
         }
         List<Product> products = qr.getResultList();
@@ -179,7 +180,9 @@ public class ProductDAO implements Serializable {
     public void deleteProduct(int id) throws Exception {
         EntityManager em = emf.createEntityManager();
         Product deleteProduct = findById(id);
-        deleteProduct.setStatus("Inactive");
+        StatusDAO dao = new StatusDAO();
+        Status inactive = dao.getStatus("Inactive");
+        deleteProduct.setStatus(inactive);
         em.getTransaction().begin();
         em.merge(deleteProduct);
         em.getTransaction().commit();

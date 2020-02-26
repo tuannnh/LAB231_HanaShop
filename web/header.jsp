@@ -18,9 +18,10 @@
         <!-- CSS Files -->
         <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
         <link href="assets/css/jquery-ui.css rel="stylesheet" />
-        <link href="assets/css/paper-kit.css?v=2.3.0" rel="stylesheet" />
+              <link href="assets/css/paper-kit.css?v=2.3.0" rel="stylesheet" />
         <link href="assets/css/demo.css" rel="stylesheet" />
         <link href="assets/css/sweetalert2.min.css" rel="stylesheet" />
+        <link href="assets/css/bootstrap-rating.css" rel="stylesheet" />
         <link href="assets/css/mycss.css" rel="stylesheet" />
 
     </head>
@@ -66,6 +67,9 @@
                                         <a href="admin-category.jsp" class="dropdown-item">
                                             Category Management
                                         </a>
+                                        <a href="admin-coupon.jsp" class="dropdown-item">
+                                            Coupon Management
+                                        </a>
                                         <a href="Logout" class="dropdown-item">
                                             Logout
                                         </a>
@@ -87,7 +91,7 @@
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="btn btn-round btn-info" href="cart.jsp" target="_blank">
+                                    <a class="btn btn-round btn-info" href="cart.jsp">
                                         <i class="nc-icon nc-cart-simple"></i> View Cart
                                     </a>
                                 </li>

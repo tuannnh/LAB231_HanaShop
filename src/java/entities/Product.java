@@ -37,16 +37,22 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "tbl_Product", catalog = "ShopDB", schema = "dbo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p ORDER BY p.createDate DESC"),
-    @NamedQuery(name = "Product.findAllAvailable", query = "SELECT p FROM Product p WHERE p.status = 'Active' AND p.quantity > 0 ORDER BY p.createDate DESC"),
+    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
+    @NamedQuery(name = "Product.findAllAvailable", query = "SELECT p FROM Product p WHERE p.status.statusName = 'Active' AND p.quantity > 0 ORDER BY p.createDate DESC"),
     @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
     @NamedQuery(name = "Product.findByName", query = "SELECT p FROM Product p WHERE p.name = :name"),
+    @NamedQuery(name = "Product.findByImageURL", query = "SELECT p FROM Product p WHERE p.imageURL = :imageURL"),
     @NamedQuery(name = "Product.findByPrice", query = "SELECT p FROM Product p WHERE p.price = :price"),
     @NamedQuery(name = "Product.findByCreateDate", query = "SELECT p FROM Product p WHERE p.createDate = :createDate"),
     @NamedQuery(name = "Product.findByQuantity", query = "SELECT p FROM Product p WHERE p.quantity = :quantity"),
-    @NamedQuery(name = "Product.findByModifiedDate", query = "SELECT p FROM Product p WHERE p.modifiedDate = :modifiedDate"),
-    @NamedQuery(name = "Product.findByStatus", query = "SELECT p FROM Product p WHERE p.status = :status")})
+    @NamedQuery(name = "Product.findByStatus", query = "SELECT p FROM Product p WHERE p.status = :status"),
+    @NamedQuery(name = "Product.findByModifiedDate", query = "SELECT p FROM Product p WHERE p.modifiedDate = :modifiedDate")})
 public class Product implements Serializable {
+    @JoinColumn(name = "status", referencedColumnName = "statusName", nullable = false)
+    @ManyToOne(optional = false)
+    private Status status;
+
+
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,8 +64,7 @@ public class Product implements Serializable {
     @Column(name = "name", nullable = false, length = 150)
     private String name;
     @Basic(optional = false)
-    @Lob
-    @Column(name = "imageURL", nullable = false, length = 2147483647)
+    @Column(name = "imageURL", nullable = false, length = 255)
     private String imageURL;
     @Basic(optional = false)
     @Lob
@@ -67,7 +72,7 @@ public class Product implements Serializable {
     private String description;
     @Basic(optional = false)
     @Column(name = "price", nullable = false)
-    private float price;
+    private double price;
     @Basic(optional = false)
     @Column(name = "createDate", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -78,18 +83,15 @@ public class Product implements Serializable {
     @Column(name = "modifiedDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedDate;
-    @Basic(optional = false)
-    @Column(name = "status", nullable = false, length = 50)
-    private String status;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private List<OrderItem> orderItemList;
     @JoinColumn(name = "modifiedBy", referencedColumnName = "email")
     @ManyToOne
     private Account modifiedBy;
-    @JoinColumn(name = "categoryId", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "category", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private Category categoryId;
-    
+    private Category category;
+
     @Transient
     private String error;
 
@@ -100,7 +102,7 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public Product(Integer id, String name, String imageURL, String description, float price, Date createDate, int quantity, String status) {
+    public Product(Integer id, String name, String imageURL, String description, double price, Date createDate, int quantity, Status status) {
         this.id = id;
         this.name = name;
         this.imageURL = imageURL;
@@ -111,14 +113,14 @@ public class Product implements Serializable {
         this.status = status;
     }
 
-    public Product(String name, String imageURL, String description, float price, Date createDate, int quantity, Category categoryId, String status) {
+    public Product(String name, String imageURL, String description, double price, Date createDate, int quantity, Category category, Status status) {
         this.name = name;
         this.imageURL = imageURL;
         this.description = description;
         this.price = price;
         this.createDate = createDate;
         this.quantity = quantity;
-        this.categoryId = categoryId;
+        this.category = category;
         this.status = status;
     }
 
@@ -154,20 +156,19 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
-    
-    public String getStringPrice(){
+
+    public String getStringPrice() {
         return String.format("%.2f", price);
     }
-    
-     public String getSubTotal(){
+
+    public String getSubTotal() {
         return String.format("%.2f", price * quantity);
     }
-    
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -188,23 +189,19 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
+
+
     public String getModifiedDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(modifiedDate);
+        if (modifiedDate != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            return sdf.format(modifiedDate);
+        }
+        return null;
+
     }
-    
-   
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     @XmlTransient
@@ -224,12 +221,12 @@ public class Product implements Serializable {
         this.modifiedBy = modifiedBy;
     }
 
-    public Category getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Category categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getError() {
@@ -239,8 +236,6 @@ public class Product implements Serializable {
     public void setError(String error) {
         this.error = error;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -265,6 +260,14 @@ public class Product implements Serializable {
     @Override
     public String toString() {
         return "Product: " + name + " " + quantity + " " + error;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
 }

@@ -7,8 +7,10 @@ package controllers.food;
 
 import daos.CategoryDAO;
 import daos.ProductDAO;
+import daos.StatusDAO;
 import entities.Category;
 import entities.Product;
+import entities.Status;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +51,9 @@ public class CreateFoodServlet extends HttpServlet {
             Category category = cdao.findById(Integer.parseInt(categoryId));
 
             Date createDate = new Date();
-            String status = "Active";
+            
+            StatusDAO statusDAO = new StatusDAO();
+            Status status = statusDAO.getStatus("Active");
 
             //Save Image
             Part filePart = request.getPart("image"); // Retrieves <input type="file" name="image">
@@ -65,7 +69,7 @@ public class CreateFoodServlet extends HttpServlet {
             }
 
             String imageURL = "images/" + fileName;
-            Product newProduct = new Product(name, imageURL, description, Float.parseFloat(price), createDate, Integer.parseInt(quantity), category, status);
+            Product newProduct = new Product(name, imageURL, description, Double.parseDouble(price), createDate, Integer.parseInt(quantity), category, status);
             ProductDAO pdao = new ProductDAO();
             pdao.createProduct(newProduct);
 

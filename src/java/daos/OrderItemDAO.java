@@ -26,9 +26,10 @@ public class OrderItemDAO implements Serializable {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         for (Product item : cart.getPurchasedItems()) {
-            OrderItem newOrderItem = new OrderItem(item.getQuantity(), item.getPrice(),invoice, item);
-            invoice.getOrderItemList().add(newOrderItem);
+            OrderItem newOrderItem = new OrderItem(item.getQuantity(), item.getPrice(), invoice, item);
             em.persist(newOrderItem);
+            invoice.addOrderItem(newOrderItem);
+            em.merge(invoice);
         }
         em.getTransaction().commit();
         em.close();

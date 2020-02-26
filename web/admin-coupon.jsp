@@ -4,6 +4,8 @@
     Author     : tuannnh
 --%>
 
+<%@page import="entities.Coupon"%>
+<%@page import="daos.CouponDAO"%>
 <%@page import="entities.Category"%>
 <%@page import="java.util.List"%>
 <%@page import="daos.CategoryDAO"%>
@@ -28,21 +30,29 @@
 
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
-                                    Create Category
+                                    Create Coupon
                                 </button>
 
                                 <!-- Modal -->
                                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="create-category" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
-                                        <form action="CreateCategory" method="POST" class="validate-form">
+                                        <form action="CreateCoupon" method="POST" class="validate-form">
 
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Create new Category</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Create new Coupon</h5>
                                                 </div>
-                                                <div class="modal-body validate-input" data-validate = "Please enter valid name">
-                                                    <h5>Category Name:</h5>
-                                                    <input class="input-group my-input" type="text" name="txtName" required=""/>
+                                                <div class="modal-body">
+                                                    <div class="validate-input" data-validate = "Please enter valid name">
+                                                        <h5>Coupon Name:</h5>
+                                                        <input class="input-group my-input" type="text" name="txtName"/>
+                                                    </div>
+
+                                                    <div class="validate-input" data-validate = "Please enter valid discount">
+                                                        <h5>Coupon discount:</h5>
+                                                        <input class="input-group my-input" type="text" name="txtDiscount"/>
+                                                    </div>
+
                                                 </div>
                                                 <div class="modal-footer">
                                                     <div class="left-side">
@@ -63,9 +73,9 @@
                         </div>
                         <br/>
                         <%
-                            CategoryDAO cdao = new CategoryDAO();
-                            List<Category> categories = cdao.getAllCategoriesAdmin();
-                            pageContext.setAttribute("categoryList", categories);
+                            CouponDAO cdao = new CouponDAO();
+                            List<Coupon> coupons = cdao.getAllCoupons();
+                            pageContext.setAttribute("LIST", coupons);
                         %>
                         <div class="row">
                             <div class="table-responsive">
@@ -74,43 +84,38 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Name</th>
+                                            <th>Discount</th>
                                             <th>Status</th>
                                             <th class="text-right">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach  items="${categoryList}" var="category" varStatus="counter">
-
-
+                                        <c:forEach  items="${LIST}" var="coupon" varStatus="counter">
                                             <tr>
-                                        <form action="UpdateCategory" class="btn btn-sm btn-link" method="POST">
-                                            <td>${counter.count}</td>
-                                            <td>
-                                                <input class="input form-control no-border " name="txtName" type="text" value="${category.name}">
-                                            </td>
-                                            <td>
-                                                ${category.status.statusName}
-                                            </td>
-                                            <td class="td-actions text-right">
-                                                <input type="hidden" name="txtId" value="${category.id}" />
-                                                <button type="submit" data-toggle="tooltip" data-placement="top" title=""
-                                                        data-original-title="Update" class="btn btn-success btn-link btn-sm">
-                                                    <i class="fa fa-star fa-2x"></i>update
-                                                </button>
-                                        </form>
+                                                <td>${counter.count}</td>
+                                                <td>
+                                                    <input class="input form-control no-border " name="txtName" type="text" value="${coupon.coupon}">
+                                                </td>
+                                                <td>
+                                                    ${coupon.discount * 100}%
+                                                </td>
+                                                <td>
+                                                    ${coupon.status.statusName}
+                                                </td>
 
-                                        <form action="DeleteCategory" class="btn btn-sm btn-link" method="POST">
-                                            <input type="hidden" name="txtId" value="${category.id}"/>
-                                            <button type="submit" data-toggle="tooltip" data-placement="top" title=""
-                                                    data-original-title="Change Coupon Status" class="btn btn-danger btn-link btn-sm">
-                                                <i class="fa fa-edit fa-2x"></i>Change
-                                            </button>
-                                        </form>
-                                        </td>
+                                                <td class="td-actions text-right">
+                                                    <form action="DeleteCoupon" class="btn btn-sm btn-link" method="POST">
+                                                        <input type="hidden" name="txtCoupon" value="${coupon.coupon}" />
+                                                        <button type="submit" data-toggle="tooltip" data-placement="top" title=""
+                                                                data-original-title="Change Coupon Status" class="btn btn-danger btn-link btn-sm">
+                                                            <i class="fa fa-edit fa-2x"></i>Change
+                                                        </button>
+                                                    </form>
 
+                                                </td>
+                                            </tr>
 
-                                        </tr>
-                                    </c:forEach>
+                                        </c:forEach>
 
                                     </tbody>
                                 </table>

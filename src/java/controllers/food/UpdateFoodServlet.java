@@ -8,9 +8,11 @@ package controllers.food;
 import static controllers.food.CreateFoodServlet.log;
 import daos.CategoryDAO;
 import daos.ProductDAO;
+import daos.StatusDAO;
 import entities.Account;
 import entities.Category;
 import entities.Product;
+import entities.Status;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -55,12 +57,12 @@ public class UpdateFoodServlet extends HttpServlet {
             String description = getValue(request.getPart("txtDescription"));
             String price = getValue(request.getPart("txtPrice"));
             String quantity = getValue(request.getPart("txtQuantity"));
-            String categoryId = getValue(request.getPart("txtCategory"));
-            String status = getValue(request.getPart("txtStatus"));
+            String category = getValue(request.getPart("txtCategory"));
+            String statusName = getValue(request.getPart("txtStatus"));
             String imageURL = getValue(request.getPart("txtImageURL"));
 
             CategoryDAO cdao = new CategoryDAO();
-            Category category = cdao.findById(Integer.parseInt(categoryId));
+            Category newCategory = cdao.findById(Integer.parseInt(category));
 
             Date modifiedDate = new Date();
             Account modifiedBy = (Account) session.getAttribute("USER");
@@ -89,9 +91,13 @@ public class UpdateFoodServlet extends HttpServlet {
             updateProduct.setName(name);
             updateProduct.setImageURL(imageURL);
             updateProduct.setDescription(description);
-            updateProduct.setPrice(Float.parseFloat(price));
+            updateProduct.setPrice(Double.parseDouble(price));
             updateProduct.setQuantity(Integer.parseInt(quantity));
-            updateProduct.setCategoryId(category);
+            updateProduct.setCategory(newCategory);
+            
+            StatusDAO statusDAO = new StatusDAO();
+            Status status = statusDAO.getStatus(statusName);
+            
             updateProduct.setStatus(status);
             updateProduct.setModifiedDate(modifiedDate);
             updateProduct.setModifiedBy(modifiedBy);

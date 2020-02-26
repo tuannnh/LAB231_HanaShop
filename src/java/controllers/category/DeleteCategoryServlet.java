@@ -7,6 +7,7 @@ package controllers.category;
 
 import daos.CategoryDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,25 +23,12 @@ public class DeleteCategoryServlet extends HttpServlet {
     static Logger log = Logger.getLogger(DeleteCategoryServlet.class);
     private static final String URL = "admin-category.jsp";
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             String id = request.getParameter("txtId");
             CategoryDAO dao = new CategoryDAO();
-            String result = dao.deleteCategory(Integer.parseInt(id));
-            if (!result.equals("")) {
-                request.setAttribute("MESSAGE", "Can not delete: The category " + result +" is in use!");
-                request.getRequestDispatcher(URL).forward(request, response);
-            }
+            dao.deleteCategory(Integer.parseInt(id));
         } catch (Exception e) {
             log.info("Error at Create Category Servlet: " + e.getMessage());
             e.printStackTrace();

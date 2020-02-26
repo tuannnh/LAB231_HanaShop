@@ -54,6 +54,9 @@ public class UpdateCartServlet extends HttpServlet {
                     cart.removeFromCart(Integer.parseInt(id));
                 }
             }
+            if(cart.getPurchasedItems().size() < 1){
+                cart.setCoupon(null);
+            }
             session.setAttribute("CART", cart);
         } catch (Exception e) {
             log.info("Error at Update Cart Servlet: " + e.getMessage());

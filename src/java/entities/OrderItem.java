@@ -32,7 +32,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "OrderItem.findByQuantity", query = "SELECT o FROM OrderItem o WHERE o.quantity = :quantity"),
     @NamedQuery(name = "OrderItem.findByProductPrice", query = "SELECT o FROM OrderItem o WHERE o.productPrice = :productPrice")})
 public class OrderItem implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,13 +43,13 @@ public class OrderItem implements Serializable {
     private int quantity;
     @Basic(optional = false)
     @Column(name = "productPrice", nullable = false)
-    private float productPrice;
-    @JoinColumn(name = "invoiceId", referencedColumnName = "id", nullable = false)
+    private double productPrice;
+    @JoinColumn(name = "invoice", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private Invoice invoiceId;
-    @JoinColumn(name = "productId", referencedColumnName = "id", nullable = false)
+    private Invoice invoice;
+    @JoinColumn(name = "product", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
-    private Product productId;
+    private Product product;
 
     public OrderItem() {
     }
@@ -59,17 +58,17 @@ public class OrderItem implements Serializable {
         this.id = id;
     }
 
-    public OrderItem(Integer id, int quantity, float productPrice) {
+    public OrderItem(Integer id, int quantity, double productPrice) {
         this.id = id;
         this.quantity = quantity;
         this.productPrice = productPrice;
     }
 
-    public OrderItem(int quantity, float productPrice, Invoice invoiceId, Product productId) {
+    public OrderItem(int quantity, double productPrice, Invoice invoice, Product product) {
         this.quantity = quantity;
         this.productPrice = productPrice;
-        this.invoiceId = invoiceId;
-        this.productId = productId;
+        this.invoice = invoice;
+        this.product = product;
     }
 
     public Integer getId() {
@@ -88,7 +87,7 @@ public class OrderItem implements Serializable {
         this.quantity = quantity;
     }
 
-    public float getProductPrice() {
+    public double getProductPrice() {
         return productPrice;
     }
 
@@ -100,24 +99,24 @@ public class OrderItem implements Serializable {
         return String.format("%.2f", productPrice * quantity);
     }
 
-    public void setProductPrice(float productPrice) {
+    public void setProductPrice(double productPrice) {
         this.productPrice = productPrice;
     }
 
-    public Invoice getInvoiceId() {
-        return invoiceId;
+    public Invoice getInvoice() {
+        return invoice;
     }
 
-    public void setInvoiceId(Invoice invoiceId) {
-        this.invoiceId = invoiceId;
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
     }
 
-    public Product getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(Product productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @Override
@@ -144,5 +143,6 @@ public class OrderItem implements Serializable {
     public String toString() {
         return "entities.OrderItem[ id=" + id + " ]";
     }
+
 
 }

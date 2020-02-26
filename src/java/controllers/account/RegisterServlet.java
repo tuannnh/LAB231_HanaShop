@@ -6,6 +6,7 @@
 package controllers.account;
 
 import daos.AccountDAO;
+import google.VerifyRecaptcha;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,20 +33,26 @@ public class RegisterServlet extends HttpServlet {
                 //Register by filling form
                 String email = request.getParameter("txtEmail");
                 String password = request.getParameter("txtPassword");
-                AccountDAO dao = new AccountDAO();
-                boolean result = dao.registerByForm(email, password);
-                if (result) {
-                    url = SUCCESS;
+                String gRecaptchaResponse = request
+                        .getParameter("g-recaptcha-response");
+                boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+                if (!verify) {
+                    request.setAttribute("RECATPCHA_MESSAGE", "You missed the recatpcha!");
                 } else {
-                    request.setAttribute("ERROR_MESSAGE", "The email is registered!");
+                    AccountDAO dao = new AccountDAO();
+                    boolean result = dao.registerByForm(email, password);
+                    if (result) {
+                        url = SUCCESS;
+                    } else {
+                        request.setAttribute("ERROR_MESSAGE", "The email is registered!");
+                    }
                 }
+
             } else {
                 // Register by Google
                 String accessToken = google.GoogleUtils.getTokenRegister(code);
-                System.out.println("Access token: " + accessToken);
                 google.GooglePojo userObj = google.GoogleUtils.getUserInfo(accessToken);
                 String email = userObj.getEmail();
-                System.out.println(email + "This is email");
                 AccountDAO dao = new AccountDAO();
                 boolean result = dao.registerByGoogle(email);
                 if (result) {
@@ -54,9 +61,7 @@ public class RegisterServlet extends HttpServlet {
                     request.setAttribute("ERROR_MESSAGE", "The email is registered!");
                 }
             }
-            if (url.equals(ERROR)) {
-                request.setAttribute("ERROR_MESSAGE", "Register Error!");
-            }
+
         } catch (Exception e) {
             log.info("Error at Register Servlet: " + e.getMessage());
             e.printStackTrace();

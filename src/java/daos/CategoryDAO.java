@@ -7,6 +7,7 @@ package daos;
 
 import entities.Category;
 import entities.Product;
+import entities.Status;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -21,12 +22,19 @@ public class CategoryDAO implements Serializable {
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("Lab231_HanaShopPU");
 
-    public Category findById(int categoryId) throws Exception {
+    public Category findById(int category) throws Exception {
         EntityManager em = emf.createEntityManager();
-        return em.find(Category.class, categoryId);
+        return em.find(Category.class, category);
     }
 
     public List<Category> getAllCategories() throws Exception {
+        EntityManager em = emf.createEntityManager();
+        List<Category> categories = em.createNamedQuery("Category.findAllAvailable").getResultList();
+        em.close();
+        return categories;
+    }
+
+    public List<Category> getAllCategoriesAdmin() throws Exception {
         EntityManager em = emf.createEntityManager();
         List<Category> categories = em.createNamedQuery("Category.findAll").getResultList();
         em.close();
@@ -38,6 +46,9 @@ public class CategoryDAO implements Serializable {
 
         if (em.createNamedQuery("Category.findByName").setParameter("name", name).getResultList().size() < 1) {
             Category category = new Category(name);
+            StatusDAO dao = new StatusDAO();
+            Status newStatus = dao.getStatus("Active");
+            category.setStatus(newStatus);
             em.getTransaction().begin();
             em.persist(category);
             em.getTransaction().commit();
@@ -50,7 +61,7 @@ public class CategoryDAO implements Serializable {
     public boolean updateCategory(int id, String name) throws Exception {
         EntityManager em = emf.createEntityManager();
         Category category = em.find(Category.class, id);
-        if (em.createNamedQuery("Category.findByName").setParameter("name", name).getResultList().size() < 1) {
+        if (!em.createNamedQuery("Category.findByName").setParameter("name", name).getResultList().contains(category))  {
             category.setName(name);
             em.getTransaction().begin();
             em.merge(category);
@@ -58,23 +69,25 @@ public class CategoryDAO implements Serializable {
             em.close();
             return true;
         }
+
         return false;
     }
 
-    public String deleteCategory(int id) throws Exception {
+    public void deleteCategory(int id) throws Exception {
         EntityManager em = emf.createEntityManager();
-
-        Category deleteCategory = em.find(Category.class, id);
-        List<Product> usingProducts = deleteCategory.getProductList();
-        if (usingProducts.size() < 1) {
-            em.getTransaction().begin();
-            em.remove(deleteCategory);
-            em.getTransaction().commit();
-            em.close();
-            return "";
+        Category category = em.find(Category.class, id);
+        StatusDAO dao = new StatusDAO();
+        Status newStatus;
+        if (category.getStatus().getStatusName().equals("Active")) {
+            newStatus = dao.getStatus("Inactive");
+            category.setStatus(newStatus);
+        } else {
+            newStatus = dao.getStatus("Active");
         }
-        return deleteCategory.getName();
-
+        category.setStatus(newStatus);
+        em.getTransaction().begin();
+        em.merge(category);
+        em.getTransaction().commit();
+        em.close();
     }
-
 }

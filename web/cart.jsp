@@ -27,56 +27,101 @@
                         <div class="col-md-12">
                             <h4 class="title">Your Shopping Cart</h4>
                         </div>
-                        <div class="col-md-10 ml-auto mr-auto">
-                            <div class="table-responsive">
-                                <table class="table table-shopping">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center"></th>
-                                            <th class="text-center">Product</th>
-                                            <th class="text-right">Price</th>
-                                            <th class="text-right">Quantity</th>
-                                            <th class="text-right">Subtotal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach items="${sessionScope.CART.purchasedItems}" var="item" varStatus="counter">
+                        <c:if test="${sessionScope.CART.purchasedItems.size() > 0}">
+                            <div class="col-md-10 ml-auto mr-auto">
+                                <div class="table-responsive">
+                                    <table class="table table-shopping">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center"></th>
+                                                <th class="text-center">Product</th>
+                                                <th class="text-right">Price</th>
+                                                <th class="text-right">Quantity</th>
+                                                <th class="text-right">Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach items="${sessionScope.CART.purchasedItems}" var="item" varStatus="counter">
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="img-container">
+                                                            <img src="${item.imageURL}" alt="Agenda">
+                                                        </div>
+                                                    </td>
+                                                    <td class="td-product">
+                                                        <strong>${item.name}</strong>
+                                                        <p>${item.description}</p>
+                                                    </td>
+                                                    <td class="td-price">
+                                                        <small>$</small><label id="${counter.count}-price">${item.stringPrice} </label>
+                                                    </td>
+                                                    <td class="td-number td-quantity align-middle">
+                                                        <c:if test="${requestScope.ID eq item.id}">
+                                                            <p class="text-right text-danger">${requestScope.MESSAGE}</p>
+                                                            <p class="text-right text-danger">${item.error}</p>
+                                                        </c:if>
+                                                        <form id="${counter.count}-form" class="text-right" action="UpdateCart" method="POST">
+                                                            <div class="btn-group">
+
+                                                                <input type="button" value="-" class="btn btn-sm btn-border btn-round" onclick="removeItem(${counter.count}, '${item.name}')">
+                                                                <input id="${counter.count}-quantity" class="input-quantity text-center" type="text" value="${item.quantity}"/>
+                                                                <input type="hidden" name="txtId" value="${item.id}" />
+                                                                <input type="submit" value="Update" name="txtAction" hidden="true" />
+                                                                <input type="button" value="+" class="btn btn-sm btn-border btn-round" onclick="addItem(${counter.count})">
+                                                            </div>
+                                                        </form>
+
+                                                    </td>
+                                                    <td class="td-number">
+                                                        <label>$ </label><label id="${counter.count}-subtotal">${item.subTotal}</label>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
 
                                             <tr>
-                                                <td>
-                                                    <div class="img-container">
-                                                        <img src="${item.imageURL}" alt="Agenda">
-                                                    </div>
+                                                <td></td>
+                                                <td colspan="2"><p class="text-right text-danger">${requestScope.COUPON_MESSAGE}</p></td>
+                                                <td class="td-total">
+                                                    Coupon
                                                 </td>
-                                                <td class="td-product">
-                                                    <strong>${item.name}</strong>
-                                                    <p>${item.description}</p>
-                                                </td>
-                                                <td class="td-price">
-                                                    <small>$</small><label id="${counter.count}-price">${item.stringPrice} </label>
-                                                </td>
-                                                <td class="td-number td-quantity align-middle">
-                                                    <c:if test="${requestScope.ID eq item.id}">
-                                                        <p class="text-right text-danger">${requestScope.MESSAGE}<p>
-                                                        <p class="text-right text-danger">${item.error}<p>
-                                                        </c:if>
-                                                    <form id="${counter.count}-form" class="text-right" action="UpdateCart" method="POST">
-                                                        <div class="btn-group">
+                                                <td class="td-total">
+                                                    <c:if test="${sessionScope.CART.coupon ne null}">
+                                                        <small>$</small>${sessionScope.CART.coupon}
+                                                        <a href="RemoveCoupon">
+                                                            <button type="button" data-toggle="tooltip" data-placement="top" title=""
+                                                                    data-original-title="Remove Coupon" class="btn btn-danger btn-link btn-sm">
+                                                                <i class="fa fa-times fa-2x"></i>
+                                                            </button>
+                                                        </a>
+                                                    </c:if>
+                                                    <c:if test="${sessionScope.CART.coupon eq null}">
 
-                                                            <input type="button" value="-" class="btn btn-sm btn-border btn-round" onclick="removeItem(${counter.count}, '${item.name}')">
-                                                            <input id="${counter.count}-quantity" class="input-quantity text-center" type="text" value="${item.quantity}"/>
-                                                            <input type="hidden" name="txtId" value="${item.id}" />
-                                                            <input type="submit" value="Update" name="txtAction" hidden="true" />
-                                                            <input type="button" value="+" class="btn btn-sm btn-border btn-round" onclick="addItem(${counter.count})">
-                                                        </div>
-                                                    </form>
+                                                        <form action="ApplyCoupon" method="POST" class=" form-inline">
+                                                            <input type="text" name="txtCoupon" value="" />
+                                                            <input type="submit" value="Apply" hidden="true" class="btn input-group-btn" />
+                                                        </form>
 
-                                                </td>
-                                                <td class="td-number">
-                                                    <label>$ </label><label id="${counter.count}-subtotal">${item.subTotal}</label>
+                                                    </c:if> 
                                                 </td>
                                             </tr>
-                                        </c:forEach>
+
+                                            <c:if test="${sessionScope.CART.coupon ne null}">
+                                                <tr>
+                                                    <td colspan="2"></td>
+                                                    <td></td>
+                                                    <td class="td-total">
+                                                        Discount
+                                                    </td>
+                                                    <td class="td-total">
+                                            <strike><small>$</small>${sessionScope.CART.totalBeforeDiscount}</strike>
+                                            <small>$</small>${sessionScope.CART.total}
+                                            </td>
+
+                                            </tr>
+                                        </c:if>
+
+
 
                                         <tr>
                                             <td colspan="2"></td>
@@ -104,11 +149,11 @@
 
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-
+                        </c:if>
 
                         <%
                             SuggestProductDAO dao = new SuggestProductDAO();
@@ -136,7 +181,7 @@
                                                     <p>${product.description}</p>
                                                     <span>${product.createDate}</span>
                                                     <h6>Category:
-                                                        <span class="badge badge-pill badge-default">${product.categoryId}</span>
+                                                        <span class="badge badge-pill badge-default">${product.category}</span>
                                                     </h6>
                                                     <p>Quantity: <span class="badge badge-pill badge-info">${product.quantity}</span></p>
                                                     <div class="row justify-content-center">

@@ -7,6 +7,7 @@ package controllers.account;
 
 import daos.AccountDAO;
 import entities.Account;
+import google.VerifyRecaptcha;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,22 +31,34 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         String url = ERROR;
         String code = request.getParameter("code");
+
         try {
             if (code == null || code.isEmpty()) {
                 // Not login by google
                 String email = request.getParameter("txtEmail");
                 String password = request.getParameter("txtPassword");
-                AccountDAO dao = new AccountDAO();
-                Account user = dao.checkLogin(email, password);
-                if (user != null) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("USER", user);
-                    if (user.getPrivilege().equals("Admin")) {
-                        url = ADMIN;
-                    } else {
-                        url = USER;
+                String gRecaptchaResponse = request
+                        .getParameter("g-recaptcha-response");
+                boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+                if (!verify) {
+                    request.setAttribute("RECATPCHA_MESSAGE", "You missed the recatpcha!");
+                } else {
+                    AccountDAO dao = new AccountDAO();
+                    Account user = dao.checkLogin(email, password);
+                    if (user != null) {
+                        HttpSession session = request.getSession();
+                        session.setAttribute("USER", user);
+                        if (user.getPrivilege().getPrivilegeName().equals("Admin")) {
+                            url = ADMIN;
+                        } else {
+                            url = USER;
+                        }
+                    }
+                    if (url.equals(ERROR)) {
+                        request.setAttribute("ERROR_MESSAGE", "Email or Password is not correct!");
                     }
                 }
+
             } else {
                 //Login by google
                 String accessToken = google.GoogleUtils.getTokenLogin(code);
@@ -56,16 +69,17 @@ public class LoginServlet extends HttpServlet {
                 if (user != null) {
                     HttpSession session = request.getSession();
                     session.setAttribute("USER", user);
-                    if (user.getPrivilege().equals("Admin")) {
+                    if (user.getPrivilege().getPrivilegeName().equals("Admin")) {
                         url = ADMIN;
                     } else {
                         url = USER;
                     }
-                } 
+                }
+                if (url.equals(ERROR)) {
+                    request.setAttribute("ERROR_MESSAGE", "Email or Password is not correct!");
+                }
             }
-            if (url.equals(ERROR)) {
-                request.setAttribute("ERROR_MESSAGE", "Email or Password is not correct!");
-            }
+
         } catch (Exception e) {
             log.info("Error at Login Servlet: " + e.getMessage());
             e.printStackTrace();

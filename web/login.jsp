@@ -17,6 +17,7 @@
         <title>
             Hana Shop
         </title>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
               name='viewport' />
         <!--     Fonts and icons     -->
@@ -76,6 +77,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-6 ml-auto mr-auto">
                             <div class="card card-register">
                                 <h5 class="card-title text-center text-danger">${requestScope.ERROR_MESSAGE}</h5>
+                                <h5 class="card-title text-center text-danger">${requestScope.RECATPCHA_MESSAGE}</h5>
 
                                 <h3 class="card-title text-center">Login</h3>
                                 <div class="social">
@@ -97,6 +99,7 @@
                                     <div class="validate-input" data-validate = "Please enter password from 6 - 24 chars">
                                         <input id="password" type="password" name="txtPassword" class="my-input form-control" placeholder="Password">
                                     </div>
+                                    <div class="g-recaptcha" data-sitekey="6LeyX9wUAAAAADHaImRkpmg0aXDibOCL6NCoJC3S"></div>
                                     <input type="submit" class="btn btn-block btn-round" value="Login"/>
                                 </form>
                                 <div class="login">

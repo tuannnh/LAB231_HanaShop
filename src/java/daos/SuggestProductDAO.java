@@ -45,9 +45,9 @@ public class SuggestProductDAO implements Serializable {
         em.getTransaction().begin();
         for (OrderItem orderItemMain : orderItems) {
             for (OrderItem orderItemSuggest : orderItems) {
-                if (!checkSuggestionIsExisted(orderItemMain.getProductId(), orderItemSuggest.getProductId())
+                if (!checkSuggestionIsExisted(orderItemMain.getProduct(), orderItemSuggest.getProduct())
                         && !orderItemMain.equals(orderItemSuggest)) {
-                    newSuggestProduct = new SuggestProduct(orderItemMain.getProductId().getId(), orderItemSuggest.getProductId().getId());
+                    newSuggestProduct = new SuggestProduct(orderItemMain.getProduct().getId(), orderItemSuggest.getProduct().getId());
                     em.persist(newSuggestProduct);
 
                 }

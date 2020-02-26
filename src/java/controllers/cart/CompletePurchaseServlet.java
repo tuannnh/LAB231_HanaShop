@@ -72,7 +72,13 @@ public class CompletePurchaseServlet extends HttpServlet {
                     //After add, shopping cart has no product, set null
                     session.setAttribute("CART", null);
                     session.setAttribute("USER_PRODUCTS", null);
-                    request.setAttribute("TOTAL", newInvoce.getTotal());
+
+                    double total = newInvoce.getTotal();
+
+                  
+
+                    request.setAttribute("TOTAL", total);
+                    request.setAttribute("INVOICE_ID", newInvoce.getId());
 
                     url = SUCCESS;
 
@@ -101,10 +107,14 @@ public class CompletePurchaseServlet extends HttpServlet {
                     //After add, shopping cart has no product, set null
                     session.setAttribute("CART", null);
                     session.setAttribute("USER_PRODUCTS", null);
-                    request.setAttribute("TOTAL", newInvoce.getTotal());
+
+                    double total = newInvoce.getTotal();
+
+                    request.setAttribute("TOTAL", total);
 
                     request.setAttribute("PAYER", payerInfo);
                     request.setAttribute("TRANSACTION", transaction);
+                    request.setAttribute("INVOICE_ID", newInvoce.getId());
 
                     url = SUCCESS;
                 }

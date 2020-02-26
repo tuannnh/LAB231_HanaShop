@@ -82,12 +82,15 @@ public class PaypalServices implements Serializable {
         amount.setCurrency("USD");
         amount.setTotal(cart.getTotal());
 
+        System.out.println(amount);
+
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
 
         ItemList itemList = new ItemList();
         List<Item> items = new ArrayList<>();
         Item item;
+        double discount = cart.getCoupon().getDiscount();
         for (Product product : cart.getPurchasedItems()) {
             item = new Item();
             item.setCurrency("USD");
@@ -96,6 +99,12 @@ public class PaypalServices implements Serializable {
             item.setQuantity(String.valueOf(product.getQuantity()));
             items.add(item);
         }
+        item = new Item();
+        item.setCurrency("USD");
+        item.setName("-" + discount * 100 + "% discount");
+        item.setPrice("-" + cart.getDiscount());
+        item.setQuantity("1");
+        items.add(item);
         itemList.setItems(items);
         transaction.setItemList(itemList);
 
@@ -111,7 +120,7 @@ public class PaypalServices implements Serializable {
         RedirectUrls redirectUrls = getRedirectURLs();
 
         List<Transaction> listTransaction = getTransactionInformation(cart);
-
+        System.out.println(listTransaction.get(0));
         Payment requestPayment = new Payment();
         requestPayment.setTransactions(listTransaction);
         requestPayment.setRedirectUrls(redirectUrls);

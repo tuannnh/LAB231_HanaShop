@@ -52,10 +52,11 @@ public class AdminSearchServlet extends HttpServlet {
                 searchStatus = (String) session.getAttribute("ADMIN_SEARCH_STATUS");
             }
             String searchPageIndex = request.getParameter("searchPageIndex");
-
-            ProductDAO dao = new ProductDAO();
-            List<Product> products = dao.searchByAdmin(searchName, searchStatus, searchCategory);
-            session.setAttribute("ADMIN_PRODUCTS", products);
+            if (searchCategory != null && searchStatus != null) {
+                ProductDAO dao = new ProductDAO();
+                List<Product> products = dao.searchByAdmin(searchName, searchStatus, searchCategory);
+                session.setAttribute("ADMIN_PRODUCTS", products);
+            }
             if (searchPageIndex == null) {
                 request.setAttribute("PAGE", "1");
 

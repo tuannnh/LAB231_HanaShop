@@ -35,6 +35,7 @@
 <!--  Plugin for presentation page - isometric cards  -->
 <script src="assets/js/plugins/presentation-page/main.js"></script>
 <script src="assets/js/sweetalert2.min.js"></script>
+<script src="assets/js/bootstrap-rating.min.js"></script>
 <script src="assets/js/myjs.js"></script>
 
 </body>

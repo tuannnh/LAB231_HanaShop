@@ -91,7 +91,8 @@
                             <c:set var="PAGE" value="1" scope="request"/>
                         </c:if>
 
-                        <c:set var="TOTAL_PAGE" value="${Math.ceil(sessionScope.ADMIN_PRODUCTS.size()/20)}" scope="request"/>
+                        <c:set var="OFFSET" value="3" scope="request"/>
+                        <c:set var="TOTAL_PAGE" value="${Math.ceil(sessionScope.ADMIN_PRODUCTS.size()/OFFSET)}" scope="request"/>
                         <c:set var="ADMIN_SEARCH_LIST" value="${requestScope.ADMIN_PRODUCTS}" scope="session"/>
 
                         <div class="row">
@@ -110,7 +111,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${sessionScope.ADMIN_PRODUCTS}" var="product" begin="${(requestScope.PAGE - 1)*20}" end="${(requestScope.PAGE - 1)*20 + 19}">
+                                        <c:forEach items="${sessionScope.ADMIN_PRODUCTS}" var="product" begin="${(requestScope.PAGE - 1)*OFFSET}" end="${(requestScope.PAGE - 1)*OFFSET + (OFFSET-1)}">
                                             <tr>
                                                 <td class="text-center">
                                                     <div class="img-container" style="max-width: 50px; max-height: 50px;">
@@ -155,35 +156,35 @@
                                 <ul class="pagination justify-content-end">
 
                                     <li class="page-item  <c:if test="${requestScope.PAGE eq '1'}">disabled</c:if>" >
-                                        <c:url var="ChangePageLink" value="ChangePageAdmin">
+                                        <c:url var="ChangePageAdminLink" value="ChangePageAdmin">
                                             <c:param name="txtSearch" value="${sessionScope.ADMIN_SEARCH_NAME}"/>
                                             <c:param name="txtCategory" value="${sessionScope.ADMIN_SEARCH_CATEGORY}"/>
                                             <c:param name="txtStatus" value="${sessionScope.ADMIN_SEARCH_STATUS}"/>
                                             <c:param name="pageIndex" value="${requestScope.PAGE - 1}"/>
                                         </c:url>
-                                        <a class="page-link" href="${ChangePageLink}" tabindex="-1">Previous</a>
+                                        <a class="page-link" href="${ChangePageAdminLink}" tabindex="-1">Previous</a>
                                     </li>
 
                                     <c:forEach begin="1" end="${TOTAL_PAGE}" varStatus="counter">
 
-                                        <c:url var="ChangePageLink" value="ChangePageAdmin">
+                                        <c:url var="ChangePageAdminLink" value="ChangePageAdmin">
                                             <c:param name="txtSearch" value="${sessionScope.ADMIN_SEARCH_NAME}"/>
                                             <c:param name="txtCategory" value="${sessionScope.ADMIN_SEARCH_CATEGORY}"/>
                                             <c:param name="txtStatus" value="${sessionScope.ADMIN_SEARCH_STATUS}"/>
                                             <c:param name="pageIndex" value="${counter.count}"/>
                                         </c:url>
 
-                                        <li class="page-item <c:if test="${requestScope.PAGE eq counter.count}">active</c:if>"><a class="page-link" href="${ChangePageLink}">${counter.count}</a></li>
+                                        <li class="page-item <c:if test="${requestScope.PAGE eq counter.count}">active</c:if>"><a class="page-link" href="${ChangePageAdminLink}">${counter.count}</a></li>
                                         </c:forEach>
                                     <li class="page-item <c:if test="${requestScope.PAGE eq TOTAL_PAGE}">disabled</c:if>" >
-                                        <c:url var="ChangePageLink" value="ChangePageAdmin">
+                                        <c:url var="ChangePageAdminLink" value="ChangePageAdmin">
                                             <c:param name="txtSearch" value="${sessionScope.ADMIN_SEARCH_NAME}"/>
                                             <c:param name="txtCategory" value="${sessionScope.ADMIN_SEARCH_CATEGORY}"/>
                                             <c:param name="txtStatus" value="${sessionScope.ADMIN_SEARCH_STATUS}"/>
                                             <c:param name="pageIndex" value="${requestScope.PAGE + 1}"/>
                                         </c:url>
 
-                                        <a class="page-link" href="${ChangePageLink}">Next</a>
+                                        <a class="page-link" href="${ChangePageAdminLink}">Next</a>
                                     </li>
                                 </ul>
                             </nav>

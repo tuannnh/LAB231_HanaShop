@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers.paypal;
+package controllers.cart;
 
+import static controllers.cart.ApplyCouponServlet.log;
+import daos.CouponDAO;
+import entities.Coupon;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,47 +16,28 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import models.Cart;
 import org.apache.log4j.Logger;
-import paypal.PaypalServices;
 
 /**
  *
  * @author tuannnh
  */
-public class AuthorizePaypalServlet extends HttpServlet {
+public class RemoveCouponServlet extends HttpServlet {
 
-    static Logger log = Logger.getLogger(AuthorizePaypalServlet.class);
+    static Logger log = Logger.getLogger(RemoveCouponServlet.class);
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "cart.jsp";
         try {
-
             HttpSession session = request.getSession();
             Cart cart = (Cart) session.getAttribute("CART");
-            if (cart.isAvailableCart()) {
-                PaypalServices paypalServices = new PaypalServices();
-                String approvalLink = paypalServices.authorizePayment(cart);
-                url = approvalLink;
-
-            } else {
-                session.setAttribute("CART", cart);
-            }
+            CouponDAO dao = new CouponDAO();
+            cart.setCoupon(null);
+            session.setAttribute("CART", cart);
         } catch (Exception e) {
-            log.info("Error at Authorize Paypal Servlet: " + e.getMessage());
-            e.printStackTrace();
+            log.info("Error at Remove Coupon Servlet: " + e.getMessage());
         } finally {
-            response.sendRedirect(url);
+            response.sendRedirect("cart.jsp");
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
