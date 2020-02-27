@@ -41,7 +41,6 @@ public class UpdateCategoryServlet extends HttpServlet {
             session.setAttribute("USER_PRODUCTS", null);
         } catch (Exception e) {
             log.info("Error at Create Category Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             response.sendRedirect(URL);
         }

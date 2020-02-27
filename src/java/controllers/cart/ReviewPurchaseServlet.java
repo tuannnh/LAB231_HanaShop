@@ -55,7 +55,6 @@ public class ReviewPurchaseServlet extends HttpServlet {
         } catch (Exception e) {
             log.info("Error at Review Purchase Servlet: " + e.getMessage());
             request.setAttribute("MESSAGE", "Pay with Paypal error!");
-            e.printStackTrace();
         } finally {
             request.getRequestDispatcher(URL).forward(request, response);
         }

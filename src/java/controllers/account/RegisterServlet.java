@@ -64,7 +64,6 @@ public class RegisterServlet extends HttpServlet {
 
         } catch (Exception e) {
             log.info("Error at Register Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

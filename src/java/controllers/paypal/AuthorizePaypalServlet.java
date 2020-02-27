@@ -49,7 +49,6 @@ public class AuthorizePaypalServlet extends HttpServlet {
             }
         } catch (Exception e) {
             log.info("Error at Authorize Paypal Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             response.sendRedirect(url);
         }

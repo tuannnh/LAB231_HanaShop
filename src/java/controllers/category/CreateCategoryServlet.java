@@ -34,7 +34,6 @@ public class CreateCategoryServlet extends HttpServlet {
             }
         } catch (Exception e) {
             log.info("Error at Create Category Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             response.sendRedirect(URL);
         }

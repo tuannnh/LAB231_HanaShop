@@ -50,7 +50,6 @@ public class ChangePageAdminServlet extends HttpServlet {
             request.setAttribute("ADMIN_PRODUCTS", products);
         } catch (Exception e) {
             log.info("Error at Change Page Admin Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             request.getRequestDispatcher("admin-food.jsp").forward(request, response);
 

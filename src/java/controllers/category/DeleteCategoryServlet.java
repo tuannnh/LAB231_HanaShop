@@ -7,7 +7,6 @@ package controllers.category;
 
 import daos.CategoryDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +30,6 @@ public class DeleteCategoryServlet extends HttpServlet {
             dao.deleteCategory(Integer.parseInt(id));
         } catch (Exception e) {
             log.info("Error at Create Category Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             response.sendRedirect(URL);
         }

@@ -9,13 +9,10 @@ import controllers.cart.CompletePurchaseServlet;
 import daos.ProductDAO;
 import entities.Product;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 /**
@@ -44,7 +41,6 @@ public class ViewFoodServlet extends HttpServlet {
             request.setAttribute("PRODUCT", updateProduct);
         } catch (Exception e) {
             log.info("Error at View Food Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             request.getRequestDispatcher("view-food.jsp").forward(request, response);
         }

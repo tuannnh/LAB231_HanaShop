@@ -5,9 +5,7 @@
  */
 package controllers.cart;
 
-import static controllers.cart.ApplyCouponServlet.log;
 import daos.CouponDAO;
-import entities.Coupon;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +28,6 @@ public class RemoveCouponServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             Cart cart = (Cart) session.getAttribute("CART");
-            CouponDAO dao = new CouponDAO();
             cart.setCoupon(null);
             session.setAttribute("CART", cart);
         } catch (Exception e) {

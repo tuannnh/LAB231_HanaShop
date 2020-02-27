@@ -9,7 +9,6 @@ import daos.ProductDAO;
 import entities.Account;
 import entities.Product;
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -73,7 +72,6 @@ public class AddToCartServlet extends HttpServlet {
             
         } catch (Exception e) {
             log.info("Error at Add To Cart Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             request.getRequestDispatcher(callPage).forward(request, response);
         }

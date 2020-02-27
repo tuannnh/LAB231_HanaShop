@@ -7,7 +7,6 @@ package controllers.cart;
 
 import daos.ProductDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +29,6 @@ public class UpdateCartServlet extends HttpServlet {
         try {
             String id = request.getParameter("txtId");
             String action = request.getParameter("txtAction");
-            System.out.println(action);
             int quantity;
             HttpSession session = request.getSession();
             Cart cart = (Cart) session.getAttribute("CART");

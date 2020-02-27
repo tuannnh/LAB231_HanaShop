@@ -79,7 +79,6 @@ public class CreateFoodServlet extends HttpServlet {
             session.setAttribute("USER_PRODUCTS", null);
         } catch (Exception e) {
             log.info("Error at Create Food Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
 //            request.getRequestDispatcher(URL).forward(request, response);
             response.sendRedirect(URL);

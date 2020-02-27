@@ -123,7 +123,6 @@ public class CompletePurchaseServlet extends HttpServlet {
 
         } catch (Exception e) {
             log.info("Error at Complete Purchase Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

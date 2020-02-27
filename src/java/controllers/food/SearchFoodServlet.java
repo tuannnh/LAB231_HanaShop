@@ -52,7 +52,6 @@ public class SearchFoodServlet extends HttpServlet {
 
         } catch (Exception e) {
             log.info("Error at Search Food Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             request.getRequestDispatcher(URL).forward(request, response);
         }

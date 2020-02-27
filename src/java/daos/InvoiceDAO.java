@@ -7,8 +7,6 @@ package daos;
 
 import entities.Account;
 import entities.Invoice;
-import entities.OrderItem;
-import entities.Product;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

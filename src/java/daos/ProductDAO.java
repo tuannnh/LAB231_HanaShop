@@ -67,11 +67,9 @@ public class ProductDAO implements Serializable {
             for (Product purchase : cart.getPurchasedItems()) {
                 if (purchase.equals(product)) {
                     quantity = product.getQuantity() - purchase.getQuantity();
-                    System.out.println("Before change: " + product);
                     product.setQuantity(quantity);
                     em.merge(product);
                     em.flush();
-                    System.out.println("After change: " + product);
                 }
             }
         }

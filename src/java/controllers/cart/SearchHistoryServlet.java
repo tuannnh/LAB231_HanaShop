@@ -78,7 +78,6 @@ public class SearchHistoryServlet extends HttpServlet {
 
         } catch (Exception e) {
             log.info("Error at Search Food Servlet: " + e.getMessage());
-            log(e.toString());
         } finally {
             response.sendRedirect("history.jsp");
         }

@@ -7,7 +7,6 @@ package controllers.cart;
 
 import daos.InvoiceDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +46,6 @@ public class RatingServlet extends HttpServlet {
             }
         } catch (Exception e) {
             log.info("Error at Rating Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

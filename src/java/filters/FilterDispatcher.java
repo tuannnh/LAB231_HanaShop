@@ -143,8 +143,11 @@ public class FilterDispatcher implements Filter {
             guestExceptions.add("CreateCategory");
             guestExceptions.add("UpdateCategory");
             guestExceptions.add("DeleteCategory");
+            guestExceptions.add("CreateCoupon");
+            guestExceptions.add("DeleteCoupon");
             guestExceptions.add("admin-food.jsp");
             guestExceptions.add("admin-category.jsp");
+            guestExceptions.add("admin-coupon.jsp");
             guestExceptions.add("create-food.jsp");
             guestExceptions.add("view-food.jsp");
             guestExceptions.add("review.jsp");
@@ -164,8 +167,11 @@ public class FilterDispatcher implements Filter {
             userExceptions.add("CreateCategory");
             userExceptions.add("UpdateCategory");
             userExceptions.add("DeleteCategory");
+            guestExceptions.add("CreateCoupon");
+            guestExceptions.add("DeleteCoupon");
             userExceptions.add("admin-food.jsp");
             userExceptions.add("admin-category.jsp");
+            guestExceptions.add("admin-coupon.jsp");
             userExceptions.add("create-food.jsp");
             userExceptions.add("register.jsp");
             userExceptions.add("login.jsp");
@@ -180,6 +186,9 @@ public class FilterDispatcher implements Filter {
             adminExceptions.add("SearchHistory");
             adminExceptions.add("UpdateCart");
             adminExceptions.add("AuthorizePaypal");
+            adminExceptions.add("ApplyCoupon");
+            adminExceptions.add("RemoveCoupon");
+            adminExceptions.add("Rating");
             adminExceptions.add("register.jsp");
             adminExceptions.add("login.jsp");
             adminExceptions.add("cart.jsp");

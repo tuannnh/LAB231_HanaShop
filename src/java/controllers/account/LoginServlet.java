@@ -82,7 +82,6 @@ public class LoginServlet extends HttpServlet {
 
         } catch (Exception e) {
             log.info("Error at Login Servlet: " + e.getMessage());
-            e.printStackTrace();
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

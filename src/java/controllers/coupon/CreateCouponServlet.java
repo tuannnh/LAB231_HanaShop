@@ -40,8 +40,7 @@ try {
                 request.getRequestDispatcher(URL).forward(request, response);
             }
         } catch (Exception e) {
-            log.info("Error at Create Category Servlet: " + e.getMessage());
-            e.printStackTrace();
+            log.info("Error at Create Coupon Servlet: " + e.getMessage());
         } finally {
             response.sendRedirect(URL);
         }

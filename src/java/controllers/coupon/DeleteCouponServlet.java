@@ -6,10 +6,8 @@
 package controllers.coupon;
 
 import controllers.category.DeleteCategoryServlet;
-import daos.CategoryDAO;
 import daos.CouponDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +30,7 @@ public class DeleteCouponServlet extends HttpServlet {
             CouponDAO dao = new CouponDAO();
             dao.deleteCoupon(coupon);
         } catch (Exception e) {
-            log.info("Error at Create Category Servlet: " + e.getMessage());
-            e.printStackTrace();
+            log.info("Error at Delete Coupon Servlet: " + e.getMessage());
         } finally {
             response.sendRedirect(URL);
         }

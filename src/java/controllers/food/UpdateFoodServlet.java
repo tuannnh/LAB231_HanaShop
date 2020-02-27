@@ -77,7 +77,6 @@ public class UpdateFoodServlet extends HttpServlet {
                     savePath.mkdir();
                 }
                 File file = new File(savePath, fileName);
-                System.out.println("aaaaaaaaaaaaaaaaaaaaaa");
 
                 try (InputStream fileContent = filePart.getInputStream()) {
                     Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -94,10 +93,10 @@ public class UpdateFoodServlet extends HttpServlet {
             updateProduct.setPrice(Double.parseDouble(price));
             updateProduct.setQuantity(Integer.parseInt(quantity));
             updateProduct.setCategory(newCategory);
-            
+
             StatusDAO statusDAO = new StatusDAO();
             Status status = statusDAO.getStatus(statusName);
-            
+
             updateProduct.setStatus(status);
             updateProduct.setModifiedDate(modifiedDate);
             updateProduct.setModifiedBy(modifiedBy);
@@ -107,10 +106,8 @@ public class UpdateFoodServlet extends HttpServlet {
             session.setAttribute("ADMIN_PRODUCTS", null);
             session.setAttribute("USER_PRODUCTS", null);
         } catch (Exception e) {
-            log.info("Error at Create Food Servlet: " + e.getMessage());
-            e.printStackTrace();
+            log.info("Error at Update Food Servlet: " + e.getMessage());
         } finally {
-//            request.getRequestDispatcher(URL).forward(request, response);
             response.sendRedirect("AdminSearch");
         }
 
@@ -124,21 +121,6 @@ public class UpdateFoodServlet extends HttpServlet {
             value.append(buffer, 0, length);
         }
         return value.toString();
-    }
-
-    private InputStream getImageStream(HttpServletRequest request, String image) {
-        try {
-            Part part = request.getPart(image);
-            String header = part.getHeader("content-disposition");
-            InputStream input = null;
-            if (header.contains("filename")) {
-                input = part.getInputStream();
-            }
-            return input;
-        } catch (IOException | ServletException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
