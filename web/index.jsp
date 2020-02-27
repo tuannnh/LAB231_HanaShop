@@ -81,7 +81,7 @@
                             <c:if test="${requestScope.PAGE eq null}">
                                 <c:set var="PAGE" value="1" scope="request"/>
                             </c:if>
-                            <c:set var="OFFSET" value="4" scope="request"/>
+                            <c:set var="OFFSET" value="20" scope="request"/>
                             <c:set var="TOTAL_PAGE" value="${Math.ceil(sessionScope.USER_PRODUCTS.size()/OFFSET)}" scope="request"/>
                             <c:set var="USER_SEARCH_LIST" value="${requestScope.USER_PRODUCTS}" scope="session"/>
                             <c:forEach items="${sessionScope.USER_PRODUCTS}" var="product" begin="${(requestScope.PAGE - 1)*OFFSET}" end="${(requestScope.PAGE - 1)*OFFSET + (OFFSET -1)}">

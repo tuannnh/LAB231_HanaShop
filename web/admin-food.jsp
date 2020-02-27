@@ -91,7 +91,7 @@
                             <c:set var="PAGE" value="1" scope="request"/>
                         </c:if>
 
-                        <c:set var="OFFSET" value="3" scope="request"/>
+                        <c:set var="OFFSET" value="5" scope="request"/>
                         <c:set var="TOTAL_PAGE" value="${Math.ceil(sessionScope.ADMIN_PRODUCTS.size()/OFFSET)}" scope="request"/>
                         <c:set var="ADMIN_SEARCH_LIST" value="${requestScope.ADMIN_PRODUCTS}" scope="session"/>
 
