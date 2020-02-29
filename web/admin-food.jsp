@@ -4,11 +4,6 @@
     Author     : tuannnh
 --%>
 
-<%@page import="entities.Product"%>
-<%@page import="daos.ProductDAO"%>
-<%@page import="entities.Category"%>
-<%@page import="java.util.List"%>
-<%@page import="daos.CategoryDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -28,13 +23,8 @@
                             <div class="col-md-10 ml-auto text-center">
                                 <form action="AdminSearch" method="Post" class="d-block form-inline">
                                     <input name="txtAdminSearch" value="${sessionScope.ADMIN_SEARCH_NAME}" type="text" class="input-xtreme form-control no-border" placeholder="Search">
-                                    <%
-                                        CategoryDAO cdao = new CategoryDAO();
-                                        List<Category> categories = cdao.getAllCategories();
-                                        request.setAttribute("categoryList", categories);
-                                    %>
-
-
+                                    <jsp:useBean id="categoriesBean" class="models.CategoryList" scope="request"/>
+                                    <c:set var="categoryList" value="${categoriesBean.categories}" scope="request"/>
                                     <select name="txtAdminCategory" class="selectpicker col-md-3 show-tick" data-style="btn-info">
                                         <option class="select-option" value="0" 
                                                 <c:if test="${sessionScope.ADMIN_SEARCH_CATEGORY eq '0'}">selected</c:if> >All category
@@ -80,18 +70,15 @@
                         <br/>
 
                         <c:if test="${sessionScope.ADMIN_PRODUCTS eq null}">
-                            <%
-                                ProductDAO pdao = new ProductDAO();
-                                List<Product> products = pdao.getAllProducts();
-                                session.setAttribute("ADMIN_PRODUCTS", products);
-                            %>
+                            <jsp:useBean id="productsBean" class="models.ProductList" scope="request"/>
+                            <c:set var="USER_PRODUCTS" value="${productsBean.productsAdmin}" scope="session"/>
                         </c:if>
 
                         <c:if test="${requestScope.PAGE eq null}">
                             <c:set var="PAGE" value="1" scope="request"/>
                         </c:if>
 
-                        <c:set var="OFFSET" value="5" scope="request"/>
+                        <c:set var="OFFSET" value="20" scope="request"/>
                         <c:set var="TOTAL_PAGE" value="${Math.ceil(sessionScope.ADMIN_PRODUCTS.size()/OFFSET)}" scope="request"/>
                         <c:set var="ADMIN_SEARCH_LIST" value="${requestScope.ADMIN_PRODUCTS}" scope="session"/>
 

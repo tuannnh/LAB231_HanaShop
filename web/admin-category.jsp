@@ -4,9 +4,6 @@
     Author     : tuannnh
 --%>
 
-<%@page import="entities.Category"%>
-<%@page import="java.util.List"%>
-<%@page import="daos.CategoryDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -62,11 +59,8 @@
                             </div>
                         </div>
                         <br/>
-                        <%
-                            CategoryDAO cdao = new CategoryDAO();
-                            List<Category> categories = cdao.getAllCategoriesAdmin();
-                            pageContext.setAttribute("categoryList", categories);
-                        %>
+                        <jsp:useBean id="categoriesBean" class="models.CategoryList" scope="request"/>
+                        <c:set var="categoryList" value="${categoriesBean.categoriesAdmin}" scope="request"/>
                         <div class="row">
                             <div class="table-responsive">
                                 <table class="table table-striped">

@@ -3,10 +3,7 @@
     Created on : Feb 19, 2020, 2:39:39 PM
     Author     : tuannnh
 --%>
-<%@page import="java.util.List"%>
-<%@page import="models.Cart"%>
-<%@page import="entities.Product"%>
-<%@page import="daos.SuggestProductDAO"%>
+
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -154,13 +151,10 @@
                                 </div>
                             </div>
                         </c:if>
-
-                        <%
-                            SuggestProductDAO dao = new SuggestProductDAO();
-                            Cart cart = (Cart) session.getAttribute("CART");
-                            List<Product> suggestList = dao.getSuggestProducts(cart);
-                            pageContext.setAttribute("USER_SUGGEST", suggestList);
-                        %>
+                        <jsp:useBean id="suggestsBean" class="models.SuggestList" scope="request">
+                            <jsp:setProperty name="suggestsBean" property="purchasedItems" value="${sessionScope.CART.purchasedItems}"/>
+                        </jsp:useBean>
+                        <c:set var="USER_SUGGEST" value="${suggestsBean.suggests}" scope="session"/>
                         <c:if test="${USER_SUGGEST.size() > 0}">
                             <div class="col-md-12">
                                 <h4 class="title">Recommendation</h4>

@@ -16,7 +16,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import models.Cart;
 
 /**
  *
@@ -58,16 +57,15 @@ public class SuggestProductDAO implements Serializable {
         em.close();
     }
 
-    public List<Product> getSuggestProducts(Cart cart) throws Exception {
+    public List<Product> getSuggestProducts(List<Product> purchasedItems) throws Exception {
         ProductDAO productDAO = new ProductDAO();
         Product newProduct;
         EntityManager em = emf.createEntityManager();
         List<Product> suggestList = new ArrayList<>();
         List<SuggestProduct> suggestProducts;
-        if (cart != null) {
-            List<Product> purchasedItem = cart.getPurchasedItems();
+        if (purchasedItems.size() > 0) {
             Query qr;
-            for (Product item : purchasedItem) {
+            for (Product item : purchasedItems) {
                 qr = em.createQuery("SELECT sp FROM SuggestProduct sp WHERE sp.mainProduct = :item");
 
                 qr.setParameter("item", item.getId());
@@ -75,7 +73,7 @@ public class SuggestProductDAO implements Serializable {
                 for (SuggestProduct suggestItem : suggestProducts) {
                     newProduct = productDAO.findById(suggestItem.getSuggestProduct());
                     if (!suggestList.contains(newProduct)
-                            && !purchasedItem.contains(newProduct)) {
+                            && !purchasedItems.contains(newProduct)) {
                         suggestList.add(newProduct);
                     }
 

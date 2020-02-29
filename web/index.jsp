@@ -4,13 +4,6 @@
     Author     : tuannnh
 --%>
 
-<%@page import="models.Cart"%>
-<%@page import="daos.SuggestProductDAO"%>
-<%@page import="entities.Product"%>
-<%@page import="daos.ProductDAO"%>
-<%@page import="entities.Category"%>
-<%@page import="java.util.List"%>
-<%@page import="daos.CategoryDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -31,11 +24,8 @@
                         <div class="row">
 
                             <div class="col-md-12 col-12 ml-auto mr-auto text-center">
-                                <%
-                                    CategoryDAO cdao = new CategoryDAO();
-                                    List<Category> categories = cdao.getAllCategories();
-                                    pageContext.setAttribute("categoryList", categories);
-                                %>
+                                <jsp:useBean id="categoriesBean" class="models.CategoryList" scope="request"/>
+                                <c:set var="categoryList" value="${categoriesBean.categories}" scope="request"/>
 
                                 <form action="SearchFood" method="POST" role="search" class="form-inline col-md-12 ml-auto mr-auto text-center">
                                     <div class="input-group no-border col-md-10 mr-auto">
@@ -72,11 +62,8 @@
                         <br/>
                         <div class="row  text-center">
                             <c:if test="${sessionScope.USER_PRODUCTS eq null}">
-                                <%
-                                    ProductDAO pdao = new ProductDAO();
-                                    List<Product> products = pdao.getAllAvailableProducts();
-                                    session.setAttribute("USER_PRODUCTS", products);
-                                %>
+                                <jsp:useBean id="productsBean" class="models.ProductList" scope="request"/>
+                                <c:set var="USER_PRODUCTS" value="${productsBean.products}" scope="session"/>
                             </c:if>
                             <c:if test="${requestScope.PAGE eq null}">
                                 <c:set var="PAGE" value="1" scope="request"/>
@@ -164,13 +151,11 @@
                                 </ul>
                             </nav>
                         </c:if>
+                        <jsp:useBean id="suggestsBean" class="models.SuggestList" scope="request">
+                            <jsp:setProperty name="suggestsBean" property="purchasedItems" value="${sessionScope.CART.purchasedItems}"/>
+                        </jsp:useBean>
+                            <c:set var="USER_SUGGEST" value="${suggestsBean.suggests}" scope="session"/>
 
-                        <%
-                            SuggestProductDAO dao = new SuggestProductDAO();
-                            Cart cart = (Cart) session.getAttribute("CART");
-                            List<Product> suggestList = dao.getSuggestProducts(cart);
-                            pageContext.setAttribute("USER_SUGGEST", suggestList);
-                        %>
                         <c:if test="${USER_SUGGEST.size() > 0}">
                             <div class="col-md-12">
                                 <h4 class="title">Recommendation</h4>

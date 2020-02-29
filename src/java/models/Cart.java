@@ -90,7 +90,6 @@ public class Cart implements Serializable {
         if (coupon != null) {
             result -= result * coupon.getDiscount();
         }
-        System.out.println(result);
         return String.format("%.1f", result);
     }
 

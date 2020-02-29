@@ -1,8 +1,4 @@
 
-
-<%@page import="daos.CategoryDAO"%>
-<%@page import="entities.Category"%>
-<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -46,11 +42,8 @@
 
                                         <br/>
                                         <strong>Categories</strong>
-                                        <%
-                                            CategoryDAO dao = new CategoryDAO();
-                                            List<Category> categories = dao.getAllCategories();
-                                            pageContext.setAttribute("categoryList", categories);
-                                        %>
+                                        <jsp:useBean id="categoriesBean" class="models.CategoryList" scope="request"/>
+                                        <c:set var="categoryList" value="${categoriesBean.categories}" scope="request"/>
                                         <select name="txtCategory" class="selectpicker col-md-5 show-tick" data-style="btn-info">
                                             <c:forEach items="${categoryList}" var="category">
                                                 <option class="select-option" value="${category.id}">${category}</option>

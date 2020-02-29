@@ -3,12 +3,6 @@
     Created on : Feb 19, 2020, 2:22:48 PM
     Author     : tuannnh
 --%>
-
-<%@page import="entities.Coupon"%>
-<%@page import="daos.CouponDAO"%>
-<%@page import="entities.Category"%>
-<%@page import="java.util.List"%>
-<%@page import="daos.CategoryDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -72,11 +66,8 @@
                             </div>
                         </div>
                         <br/>
-                        <%
-                            CouponDAO cdao = new CouponDAO();
-                            List<Coupon> coupons = cdao.getAllCoupons();
-                            pageContext.setAttribute("LIST", coupons);
-                        %>
+                        <jsp:useBean id="couponsBean" class="models.CouponList" scope="request"/>
+                        <c:set var="LIST" value="${couponsBean.coupons}" scope="request"/>
                         <div class="row">
                             <div class="table-responsive">
                                 <table class="table table-striped">
